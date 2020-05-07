@@ -62,15 +62,21 @@ public class Classifier: BayesianClassifierDelegate {
         self.numberOfAllDocuments += docs.count
 
         for doc in docs {
-            self.numberOfDocumentByLabel[doc.label]?+=1
+            if self.numberOfDocumentByLabel[doc.label] == nil {
+                self.numberOfDocumentByLabel[doc.label] = 0
+            }
+            self.numberOfDocumentByLabel[doc.label]!+=1
 
             if self.model == MultinomialBoolean {
                 // TODO: Add a duplicate removal function.
-                // doc.tokens = removeDuplicate(doc.tokens)
+                doc.tokens = removeDuplicates(tokens: doc.tokens)
             }
 
             for token in doc.tokens {
-                self.numberOfFrequencyByLabel[doc.label]?+=1
+                if self.numberOfFrequencyByLabel[doc.label] == nil {
+                    self.numberOfFrequencyByLabel[doc.label] = 0
+                }
+                self.numberOfFrequencyByLabel[doc.label]!+=1
 
                 if self.learningResults[token] == nil {
                     self.learningResults[token] = [doc.label: 0]
@@ -95,22 +101,27 @@ public class Classifier: BayesianClassifierDelegate {
 
         if self.model == MultinomialBoolean {
             // TODO: Add a duplicate removal function.
-            // var tokens = removeDuplicate(tokens)
+            var tokens = removeDuplicates(tokens: tokens)
         }
 
         for (label, frequencyByLabel) in self.numberOfFrequencyByLabel {
             for token in tokens {
-                let numberOfToken = self.learningResults[token]![label]!
+                var numberOfToken: Int
+                if self.learningResults[token]?[label] == nil {
+                    numberOfToken = 0
+                } else {
+                    numberOfToken = self.learningResults[token]![label]!
+                }
                 posteriorProbablities[label]! += log(Double(numberOfToken+1)/Double(frequencyByLabel+vocabularyCount))
             }
         }
 
         var certain: Bool = false
-        var bestLabel: Label = Label(0)
+        var bestLabel: Label = Label()
         var highestProbablity: Double = 0
 
         for (label, probablity) in posteriorProbablities {
-            if highestProbablity == 0 || probablity > highestProbablity {
+            if (highestProbablity == 0) || (probablity > highestProbablity) {
                 certain = true
                 bestLabel = label
                 highestProbablity = probablity
