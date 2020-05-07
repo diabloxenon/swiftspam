@@ -38,15 +38,10 @@ protocol BayesianClassifierDelegate {
 // The classifying class.
 public class Classifier: BayesianClassifierDelegate {
     var model: Model
-
     var learningResults: [String: [Label: Int]]
-
     var priorProbablities: [Label: Double]
-
     var numberOfDocumentByLabel: [Label: Int]
-
     var numberOfFrequencyByLabel: [Label: Int]
-
     var numberOfAllDocuments: Int
 
     public init(newModel: Model) {
@@ -62,33 +57,22 @@ public class Classifier: BayesianClassifierDelegate {
         self.numberOfAllDocuments += docs.count
 
         for doc in docs {
-            if self.numberOfDocumentByLabel[doc.label] == nil {
-                self.numberOfDocumentByLabel[doc.label] = 0
-            }
-            self.numberOfDocumentByLabel[doc.label]!+=1
+            self.numberOfDocumentByLabel[doc.label] = (self.numberOfDocumentByLabel[doc.label] ?? 0) + 1
 
             if self.model == MultinomialBoolean {
-                // TODO: Add a duplicate removal function.
                 doc.tokens = removeDuplicates(tokens: doc.tokens)
             }
 
             for token in doc.tokens {
-                if self.numberOfFrequencyByLabel[doc.label] == nil {
-                    self.numberOfFrequencyByLabel[doc.label] = 0
-                }
-                self.numberOfFrequencyByLabel[doc.label]!+=1
+                self.numberOfFrequencyByLabel[doc.label] = (self.numberOfFrequencyByLabel[doc.label] ?? 0) + 1
 
-                if self.learningResults[token] == nil {
-                    self.learningResults[token] = [doc.label: 0]
-                }
+                self.learningResults[token] = (self.learningResults[token] ?? [doc.label: 0])
                 self.learningResults[token]![doc.label]!+=1
             }
-
         }
         for (label, documentCount) in self.numberOfDocumentByLabel {
             self.priorProbablities[label] = log(Double(documentCount)/Double(self.numberOfAllDocuments))
         }
-
     }
 
     public func classify(tokens: [String]) -> ([Label: Double], Label, Bool) {
@@ -100,18 +84,12 @@ public class Classifier: BayesianClassifierDelegate {
         }
 
         if self.model == MultinomialBoolean {
-            // TODO: Add a duplicate removal function.
             var tokens = removeDuplicates(tokens: tokens)
         }
 
         for (label, frequencyByLabel) in self.numberOfFrequencyByLabel {
             for token in tokens {
-                var numberOfToken: Int
-                if self.learningResults[token]?[label] == nil {
-                    numberOfToken = 0
-                } else {
-                    numberOfToken = self.learningResults[token]![label]!
-                }
+                let numberOfToken = (self.learningResults[token]?[label] ?? 0)
                 posteriorProbablities[label]! += log(Double(numberOfToken+1)/Double(frequencyByLabel+vocabularyCount))
             }
         }
@@ -132,5 +110,4 @@ public class Classifier: BayesianClassifierDelegate {
 
         return (posteriorProbablities, bestLabel, certain)
     }
-
 }

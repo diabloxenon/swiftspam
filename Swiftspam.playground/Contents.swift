@@ -1,11 +1,11 @@
 //: A Cocoa based Playground to present user interface
 
 import AppKit
-//import PlaygroundSupport
+import PlaygroundSupport
 
-//let nibFile = NSNib.Name("Swiftspam")
-//var topLevelObjects: NSArray?
-//
+let nibFile = NSNib.Name("Swiftspam")
+var topLevelObjects: NSArray?
+
 //Bundle.main.loadNibNamed(nibFile, owner: nil, topLevelObjects: &topLevelObjects)
 //let views = (topLevelObjects as! [Any]).filter { $0 is NSView }
 //
@@ -28,3 +28,9 @@ yoo.learn(docs: [
 var (allScores, cls, cert) = yoo.classify(tokens: ["iam", "good", "now"])
 
 print(allScores, cls, cert)
+
+Bundle.main.loadNibNamed(nibFile, owner: nil, topLevelObjects: &topLevelObjects)
+let views = (topLevelObjects as! [Any]).filter { $0 is NSView }
+
+// Present the view in Playground
+PlaygroundPage.current.liveView = views[0] as! NSView
