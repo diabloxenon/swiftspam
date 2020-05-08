@@ -7,12 +7,13 @@ import SwiftUI
 //let contentSize:CGFloat = 24
 
 // Playgrounds
-let cardHeight: CGFloat = 500
+// let cardHeight: CGFloat = 500
 let headingSize: CGFloat = 48
 let contentSize: CGFloat = 16
 
 // Common Constants
-let cardWidth: CGFloat = cardHeight * 0.6
+let factor:CGFloat = 0.75
+
 let textColor = Color(.sRGB, white: 0, opacity: 1)
 
 public struct ContentView: View {
@@ -20,63 +21,78 @@ public struct ContentView: View {
 
     @State private var offset: CGSize = .zero
     @GestureState var isLongPressed = false
+    @State var hasDragged = false
+    @State public var mail: Mail = Mail()
+    
+//    @State private var translation: CGSize = .zero
 
+    var swipe: some Gesture{
+        LongPressGesture()
+            .updating($isLongPressed) { value, state, _ in
+                    state = value
+                }.simultaneously(with: DragGesture()
+                    .onChanged {
+                    self.offset = $0.translation
+//                        self.rotation = $
+                        }
+                    .onEnded { _ in withAnimation {
+                    self.offset = .zero
+                        }
+                    print("Hello")
+                    self.hasDragged = true
+                }
+//                  .opacity(isLongPressed ? 0.3 : 1)
+        )
+    }
+    
     public var body: some View {
-
+        GeometryReader { geometry in
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: (203/255.0), green: (203/255.0), blue: (160/255.0), opacity: 1.0), Color(.sRGB, red: (181/255.0), green: (181/255.0), blue: (73/255.0), opacity: 1.0)]), startPoint: UnitPoint(x: 1, y: 1), endPoint: UnitPoint(x: 0, y: 0))
                 .edgesIgnoringSafeArea(.all)
 
+            VStack{
             //Header
             Text("📬 Swiftspam")
                 .font(.custom("HelveticaNeue-Thin", size: headingSize))
                 .foregroundColor(.black)
-                .offset(x: 0, y: -(cardWidth-(cardWidth/10)))
+                .padding(.bottom)
+                // .offset(x:0, y: -((geometry.size.height * factor * 0.6)-((geometry.size.height * factor * 0.6)/10)))
 
-            CardView(isLongPressed: isLongPressed, mail: Mail())
-                .scaleEffect(isLongPressed ? 1.1 : 1)
-                .opacity(isLongPressed ? 0.9 : 1)
-                .offset(x: offset.width, y: offset.height+(cardWidth/10))
-                .gesture(LongPressGesture()
-                    .updating($isLongPressed) { value, state, _ in
-                        state = value
-                }.simultaneously(with: DragGesture()
-                    .onChanged {
-                        self.offset = $0.translation
-                }
-                .onEnded { _ in withAnimation {
-                    self.offset = .zero
-                    }}
-//                  .opacity(isLongPressed ? 0.3 : 1)
-                ))
+                CardView(cardHeight: geometry.size.height * factor, cardWidth: geometry.size.height * factor * 0.6, mail: self.mail)
+                    .shadow(color: Color(.sRGB, white: 0, opacity: 0.15), radius: 5, x: 10, y: 10)
+                    .scaleEffect(self.isLongPressed ? 1.1 : 1)
+                    .opacity(self.isLongPressed ? 0.9 : 1)
+                    // .animation(.interactiveSpring())
+                    .offset(x: self.offset.width, y: self.offset.height)
+                    .rotationEffect(.degrees(Double(self.offset.width / geometry.size.width) * 25), anchor: .bottom)
+                    .gesture(self.swipe)
                 .animation(.interactiveSpring())
+
+            }
+            
         }
+    }
     }
 }
 
 struct CardView: View {
     // States
-    var isLongPressed: Bool
+    var cardHeight: CGFloat
+    var cardWidth: CGFloat
     var mail: Mail
 
     var body: some View {
-        ZStack {
-            Group {
-                RoundedRectangle(cornerRadius: 25, style: .continuous)
-                    .fill(Color.white)
-                    .frame(width: cardWidth, height: cardHeight)
-                    .shadow(color: Color(.sRGB, white: 0, opacity: 0.15), radius: 5, x: 10, y: 10)
-                    .padding()
-                    .animation(.interactiveSpring())
-
-                VStack(alignment: .leading, spacing: 5) {
+//        GeometryReader { geometry in
+        Group{
+                VStack(alignment: .leading) {
                     // Subject Line
                     HStack(alignment: .top, spacing: 5){
                         Text("Subject: ")
                             .font(.custom("HelveticaNeue-Bold", size: contentSize))
                             .foregroundColor(textColor)
 
-                        Text("\(mail.subject)")
+                        Text("\(self.mail.subject)")
                             .font(.custom("HelveticaNeue-Light", size: contentSize))
                             .foregroundColor(textColor)
                     }
@@ -87,7 +103,7 @@ struct CardView: View {
                             .font(.custom("HelveticaNeue-Bold", size: contentSize))
                             .foregroundColor(textColor)
 
-                        Text("\(mail.from)")
+                        Text("\(self.mail.from)")
                             .font(.custom("HelveticaNeue-Light", size: contentSize))
                             .foregroundColor(textColor)
                     }
@@ -98,21 +114,23 @@ struct CardView: View {
                             .font(.custom("HelveticaNeue-Bold", size: contentSize))
                             .foregroundColor(textColor)
 
-                        Text("\(mail.to)")
+                        Text("\(self.mail.to)")
                             .font(.custom("HelveticaNeue-Light", size: contentSize))
                             .foregroundColor(textColor)
                     }
 
                     HStack {
                         // Body
-                        Text("\(mail.body)")
+                        Text("\(self.mail.body)")
                             .font(.custom("HelveticaNeue-Light", size: contentSize))
                             .foregroundColor(textColor)
                             .padding(.top)
                     }
-                }.padding(cardHeight/20).padding(.vertical)
-                 .frame(width: cardWidth, height: cardHeight)
-            }.padding(cardHeight/10)
+                }.padding(self.cardHeight/20).padding(.top)
+                    .frame(width: self.cardWidth, height: self.cardHeight)
+                 .animation(.interactiveSpring())
+                 .background(Color.white)
+                 .cornerRadius(25)
         }
     }
 }
