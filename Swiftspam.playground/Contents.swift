@@ -18,6 +18,21 @@
 import SwiftUI
 import PlaygroundSupport
 
+//Constants
+// Swift Playgrounds
+//let cardHeight:CGFloat = 1000
+//let headingSize:CGFloat = 64
+//let contentSize:CGFloat = 24
+
+// Playgrounds
+let cardHeight:CGFloat = 500
+let headingSize:CGFloat = 48
+let contentSize:CGFloat = 16
+
+// Common Constants
+let cardWidth:CGFloat = cardHeight * 0.6
+
+
 struct ContentView: View {
     @State var frame: CGSize = .zero
     
@@ -32,14 +47,14 @@ struct ContentView: View {
             
             //Header
             Text("📬 Swiftspam")
-                .font(.custom("HelveticaNeue-Thin", size: 48))
+                .font(.custom("HelveticaNeue-Thin", size: headingSize))
                 .foregroundColor(.black)
-                .offset(x: 0, y: -295)
+                .offset(x: 0, y: -(cardWidth-(cardWidth/10)))
             
             CardView(isLongPressed: isLongPressed)
                 .scaleEffect(isLongPressed ? 1.1 : 1)
                 .opacity(isLongPressed ? 0.9 : 1)
-                .offset(x: offset.width, y: offset.height)
+                .offset(x: offset.width, y: offset.height+(cardWidth/10))
                 .gesture(LongPressGesture()
                     .updating($isLongPressed) { value, state, _ in
                         state = value
@@ -55,15 +70,6 @@ struct ContentView: View {
                 .animation(.interactiveSpring())
         }
     }
-    
-    //    func makeView(_ geometry: GeometryProxy) -> some View {
-    //        print(geometry.size.width, geometry.size.height)
-    //
-    //        DispatchQueue.main.async { self.frame = geometry.size }
-    //
-    //        return Text("Test")
-    //            .frame(width: geometry.size.width)
-    //    }
 }
 
 struct CardView: View {
@@ -71,9 +77,9 @@ struct CardView: View {
     var isLongPressed: Bool
     
     //Variables
-    var headingSize:CGFloat = 48
-    var contentSize:CGFloat = 16
-    var textColor = Color.black
+    var greetings = "👋🏻 Hello World"
+
+    var textColor = Color(.sRGB, white: 0, opacity: 1)
     
     var body: some View {
         ZStack {
@@ -81,7 +87,7 @@ struct CardView: View {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
                     //            .fill(isLongPressed ? Color.blue : Color.white)
                     .fill(Color.white)
-                    .frame(width: 300, height: 500)
+                    .frame(width: cardWidth, height: cardHeight)
                     .shadow(color: Color(.sRGB, white: 0, opacity: 0.15), radius: 5, x: 10, y: 10)
                     .padding()
                     .animation(.interactiveSpring())
@@ -93,7 +99,7 @@ struct CardView: View {
                             .font(.custom("HelveticaNeue-Bold", size: contentSize))
                             .foregroundColor(textColor)
                         
-                        Text("Hello There")
+                        Text("\(greetings)")
                             .font(.custom("HelveticaNeue-Light", size: contentSize))
                             .foregroundColor(textColor)
                     }
@@ -127,23 +133,11 @@ struct CardView: View {
                             .foregroundColor(textColor)
                             .padding(.top)
                     }
-                }.padding(50).padding(.vertical)
-            }.padding(50)
+                }.padding(cardHeight/20).padding(.vertical)
+                 .frame(width: cardWidth, height: cardHeight)
+            }.padding(cardHeight/10)
         }
     }
 }
-
-
-//let size = CGSize(width: 1024, height: 1024)
-//let frame = CGRect(origin: .zero, size: size)
-//let hosting = UIHostingController(rootView: ContentView())
-//hosting.view.frame = frame
-//////hosting.view.backgroundColor = .white
-////let window = UIWindow(frame: frame)
-////window.rootViewController = hosting
-//////window.makeKeyAndVisible()
-////
-////
-////PlaygroundPage.current.liveView = window
 
 PlaygroundPage.current.setLiveView(ContentView())
