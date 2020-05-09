@@ -21,55 +21,46 @@ enum SpamFam: Int {
 }
 
 public struct ContentView: View {
+    
+    @State public var mails: [Mail] = [
+    Mail(id: 0, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 1, subject: "Hiya", from: "Naman Bishnoi", to: "Steve Jobs", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 2, subject: "iCloud Bug Bounty", from: "Red Hat", to: "Apple", body: "Find out more!", isSpam: true, reportedAsSpam: false),
+Mail(id: 3, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 4, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 5, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 6, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 7, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 8, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 9, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 10),
+    ]
+    
     @State private var frame: CGSize = .zero // Contains Geometrical dims of current view.
     @State private var cardDim: CGSize = .zero
-    
-    @State private var offset: CGSize = .zero
-    @GestureState var isLongPressed = false
-    
-    @State private var swipeStatus: SpamFam = .none
-    
-    @State public var mail: Mail = Mail()
-    
     func setDims(_ geometry: GeometryProxy) -> some View{
         DispatchQueue.main.async {
             self.frame = geometry.size
             self.cardDim.height = geometry.size.height * factor
             self.cardDim.width = geometry.size.height * factor * 0.6 //Aspect ratio
         }
-        return Text("")
+        return EmptyView()
     }
-
-    var swipe: some Gesture{
-        LongPressGesture()
-            .updating($isLongPressed) { value, state, _ in
-                    state = value
-                }.simultaneously(with: DragGesture()
-                    .onChanged {
-                        self.offset = $0.translation
-                        
-                        if $0.translation.width / self.frame.width >= 0.35{
-//                            print("RIGHT")
-                            self.swipeStatus = .fam
-                        } else if $0.translation.width / self.frame.width <= -0.35{
-//                            print("LEFT")
-                            self.swipeStatus = .spam
-                        } else {
-//                            print("NONE")
-                            self.swipeStatus = .none
-                        }
-                    }
-                    .onEnded { v in withAnimation {
-//                        if abs(v.translation.width/self.frame.width) > 0.35{
-////                            self.onRemove(self.user)
-//                        } else{
-//                            self.offset = .zero
-//                        }
-                        self.offset = .zero
-                        self.swipeStatus = .none
-                    }
-                }
-        )
+    
+    @State private var mail: Mail = Mail()
+    func assignMail(_ mx: Mail) -> some View{
+        DispatchQueue.main.async{
+            self.mail = mx
+        }
+        return EmptyView()
+    }
+    
+    private var maxID: Int {
+        return self.mails.map { $0.id }.max() ?? 0
+    }
+    
+    private func getCardOffset(_ geometry: GeometryProxy, id: Int) -> CGFloat {
+        return  CGFloat(self.mails.count - 1 - id) * 10
     }
     
     public var body: some View {
@@ -86,17 +77,21 @@ public struct ContentView: View {
                 .foregroundColor(.black)
                 .padding(.bottom)
 
-                CardView(spamOrHam: self.swipeStatus, size: self.cardDim, mail: self.mail)
-                    .shadow(color: Color(.sRGB, white: 0, opacity: 0.15), radius: 5, x: 10, y: 10)
-                    .scaleEffect(self.isLongPressed ? 1.1 : 1)
-                    .opacity(self.isLongPressed ? 0.9 : 1)
-                    .offset(x: self.offset.width, y: self.offset.height)
-                    .rotationEffect(.degrees(Double(self.offset.width / geometry.size.width) * 25), anchor: .bottom)
-                    .gesture(self.swipe)
-                .animation(.interactiveSpring())
-
+                ZStack{
+                    ForEach(self.mails, id: \.self) { mail in
+//                        self.assignMail(mail)
+                            Group {
+                                // Range Operator
+                                if (self.maxID - 3)...self.maxID ~= mail.id {
+                                    CardView(size: self.cardDim, mail: mail, mails: self.$mails, dim: self.frame)
+                                        .offset(x: 0, y: self.getCardOffset(geometry, id: mail.id))
+                                    .animation(.spring())
+                                }
+                            }
+                        }
+                }
+                Spacer()
             }
-            
         }
     }
     }
@@ -104,9 +99,52 @@ public struct ContentView: View {
 
 struct CardView: View {
     // States
-    var spamOrHam: SpamFam
     var size: CGSize
+//    @Binding var mail: Mail
     var mail: Mail
+    @Binding var mails: [Mail]
+    @State private var spamOrHam: SpamFam = .none
+    var dim: CGSize
+    
+    @State private var offset: CGSize = .zero
+    
+    @GestureState var isSelected = false
+    
+    var swipe: some Gesture{
+            LongPressGesture()
+                .updating($isSelected) { value, state, _ in
+                        state = value
+                    }.simultaneously(with: DragGesture()
+                        .onChanged {
+                            self.offset = $0.translation
+                            
+                            if $0.translation.width / self.dim.width >= 0.35{
+    //                            print("RIGHT")
+                                self.spamOrHam = .fam
+//                                self.mail.reportedAsSpam = false
+                            } else if $0.translation.width / self.dim.width <= -0.35{
+    //                            print("LEFT")
+                                self.spamOrHam = .spam
+//                                self.mail.reportedAsSpam = true
+                            } else {
+    //                            print("NONE")
+                                self.spamOrHam = .none
+                            }
+                        }
+                        .onEnded { v in withAnimation {
+                            if abs(v.translation.width/self.dim.width) > 0.35{
+                                self.mails.removeAll { $0.id == self.mail.id}
+    //                            if let index = self.mails.firstIndex(of: self.mail) {
+    //                                self.mails.remove(at: index)
+    //                            }
+                            } else{
+                                self.offset = .zero
+                                self.spamOrHam = .none
+                            }
+                        }
+                    }
+            )
+    }
 
     var body: some View {
         ZStack{
@@ -170,7 +208,13 @@ struct CardView: View {
                     .frame(width: self.size.width, height: self.size.height)
                     .opacity(0.5)
             }
-        }
+        }.shadow(color: Color(.sRGB, white: 0, opacity: 0.10), radius: 7, x: 5, y: 5)
+        .scaleEffect(self.isSelected ? 1.1 : 1)
+        .opacity(self.isSelected ? 0.9 : 1)
+        .offset(x: self.offset.width, y: self.offset.height)
+        .rotationEffect(.degrees(Double(self.offset.width / dim.width) * 25), anchor: .bottom)
+        .gesture(self.swipe)
+        .animation(.interactiveSpring())
     }
 }
 

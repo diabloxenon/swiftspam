@@ -17,9 +17,4 @@
 
 import PlaygroundSupport
 
-//let display = UIDisplay()
-
-//var mail = Mail(subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true)
-
 PlaygroundPage.current.setLiveView(hosting)
-
