@@ -20,3 +20,32 @@ public struct Mail: MailDelegate, Hashable {
         self.reportedAsSpam = reportedAsSpam
     }
 }
+
+
+public var trainingData = [
+    Mail(id: 0, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 1, subject: "Hiya", from: "Naman Bishnoi", to: "Steve Jobs", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 2, subject: "iCloud Bug Bounty", from: "Red Hat", to: "Apple", body: "Find out more!", isSpam: true, reportedAsSpam: false),
+    Mail(id: 3, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 4, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 5, subject: "RE: Verification Required #27556566", from: "idiotspammer@hax0r.com", to: "Naman Bishnoi", body: "INFO : Required-095-85579783-00 More Information please check attachment file [PDF]\n\n Your Apple ID was used to sign in to ICLoud via a Web Browser\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", isSpam: true, reportedAsSpam: false),
+    Mail(id: 6, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 7, subject: "RE:", from: "Sinister Six", to: "Naman Bishnoi", body: "You have emerged as one of the lucky winners in the Guinness Brewery Promo, to receive €650,000.00. Kindly contact guinness004@outlook.de with your name age phone number occupation and address\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", isSpam: true, reportedAsSpam: false),
+    Mail(id: 8, subject: "Ready. Set. Code.", from: "Apple Developer", to: "Naman Bishnoi", body: "👨🏻‍💻 On June 22, WWDC20 takes off. Get ready for the first global, all-online WWDC by downloading the Apple Developer app to stay notified on all the latest news, with updates for events and sessions. And there’s a lot more to come — starting with the first-ever Swift Student Challenge. <Learn More>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", isSpam: false, reportedAsSpam: false),
+    Mail(id: 9, subject: "[ILUG] What HOWTOs for SOHO system", from: "Dermot Daly", to: "Linus Torvalds", body: "Hi All, I'm trying to set up the following:\n 1. A Linux server running with a modem for internet connectivity and an ethernet card for LAN connectivity\n 2. Other LAN pcs with ethernet cards, using the Linux server for DNS/DHCP etc.\n\n Basically, I want to route any non LAN traffic through the ppp0. I've got some of the way, but like a similar post earlier about modem problems, when I am connected to the internet with eht0 up, the routing is all incorrect and noting goes out through ppp0 (eh0 must be the default route or something).\n Is there standard out of the box Linux tools that will carry out portmapping on behalf of the LAN PCs ?  (I'm planning on non routable addresses 192.168.x.x for the LAN, routed outwards via the ppp0 interface). Can someone point me at the right HOWTOs or routing documentation I need to follow? Thanks,Dermot.", isSpam: false, reportedAsSpam: false),
+    Mail(id: 10),
+]
+
+public var testData = [
+    Mail(id: 0, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 1, subject: "Hiya", from: "Naman Bishnoi", to: "Steve Jobs", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 2, subject: "iCloud Bug Bounty", from: "Red Hat", to: "Apple", body: "Find out more!", isSpam: true, reportedAsSpam: false),
+    Mail(id: 3, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 4, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 5, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 6, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 7, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 8, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 9, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+    Mail(id: 10),
+]

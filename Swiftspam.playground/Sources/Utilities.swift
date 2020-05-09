@@ -15,3 +15,11 @@ import Foundation
          return newTokens
      }
  }
+
+extension String {
+    
+    var filterAlphanum: String {
+        let allowed = Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890")
+        return self.filter {allowed.contains($0) }
+    }
+}

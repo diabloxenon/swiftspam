@@ -11,22 +11,6 @@ var spamBoy = Spam()
 
 var model:Classifier = Classifier(newModel: MultinomialTf)
 
-
-var mxs = [
-    Mail(id: 0, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 1, subject: "Hiya", from: "Naman Bishnoi", to: "Steve Jobs", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 2, subject: "iCloud Bug Bounty", from: "Red Hat", to: "Apple", body: "Find out more!", isSpam: true, reportedAsSpam: false),
-Mail(id: 3, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 4, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 5, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 6, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 7, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 8, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 9, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 10),
-    ]
-
-
 // Playgrounds
 // let cardHeight: CGFloat = 500
 let headingSize: CGFloat = 32
@@ -44,9 +28,15 @@ enum SpamFam: Int {
 public struct ContentView: View {
     
     @State public var mails: [Mail]
+    @State public var testMails: [Mail]
     @State private var mail: Mail = Mail()
     
     @State private var title: String = "📬 Swiftspam"
+    @State private var stats: Status = .start
+    
+    enum Status: Int {
+        case start, trainingDone, testingDone
+    }
     
     @State private var frame: CGSize = .zero // Contains Geometrical dims of current view.
     @State private var cardDim: CGSize = .zero
@@ -64,20 +54,57 @@ public struct ContentView: View {
 //        self.title = "\(self.mails.count) more to go"
 //        print(self.title)
         if self.mails.count == 0 {
+//            print("BP 1 familiar mails: \(famBoy) spam mails: \(spamBoy)")
             model = train(fam: famBoy, spam: spamBoy)
             self.title = "Training Done"
             print(self.title)
+            self.stats = .trainingDone
         }
         }
         return ZStack{
             Text("😄")
-                .font(.custom("HelveticaNeue-ThinItalic", size: headingSize))
+                .font(.custom("HelveticaNeue-ThinItalic", size: 64))
                 .foregroundColor(.black)
             ForEach(self.mails, id: \.self) { mail in
                 Group {
                     // Range Operator
                     if (self.maxID - 3)...self.maxID ~= mail.id {
                         CardView(size: self.cardDim, mail: mail, mails: self.$mails, dim: self.frame)
+                            .offset(x: 0, y: self.getCardOffset(id: mail.id))
+                        .animation(.spring())
+                    }
+                }
+            }
+        }
+    }
+    
+    func testEmails() -> some View{
+        DispatchQueue.main.async{
+            self.title = "🧪 Testing"
+            print(self.title)
+            let spam = test(mail: self.mail, classifier: model)
+            if spam == true{
+                self.title = "Spam"
+            }
+        }
+        return ZStack{
+            VStack{
+            HStack{
+                Text("🎉").font(.custom("HelveticaNeue-ThinItalic", size: 64))
+                Spacer()
+                Text("🎊").font(.custom("HelveticaNeue-ThinItalic", size: 64))
+                Spacer()
+                Text("🎉").font(.custom("HelveticaNeue-ThinItalic", size: 64)).rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+            }.padding(.all)
+                Text("🏆").font(.custom("HelveticaNeue-ThinItalic", size: 64))
+            }
+//            .frame(width: self.cardDim.width, height: 0)
+            
+            ForEach(self.testMails, id: \.self) { mail in
+                Group {
+                    // Range Operator
+                    if (self.maxID - 3)...self.maxID ~= mail.id {
+                        CardView(size: self.cardDim, mail: mail, mails: self.$testMails, dim: self.frame)
                             .offset(x: 0, y: self.getCardOffset(id: mail.id))
                         .animation(.spring())
                     }
@@ -109,7 +136,13 @@ public struct ContentView: View {
                 .padding(.vertical)
                 
                 // Training Emails
-                self.trainingEmails()
+                if self.stats == .start{
+                    self.trainingEmails()
+                }
+                
+                if self.stats == .trainingDone {
+                    self.testEmails()
+                }
 
                 Spacer()
             }
@@ -229,13 +262,13 @@ struct CardView: View {
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
                     .fill(Color.yellow)
                     .frame(width: self.size.width, height: self.size.height)
-                    .opacity(0.5)
+                    .opacity(0.6)
             } else if self.spamOrHam == .spam{
                 // BEGONE SPAMMER!
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
                     .fill(Color.red)
                     .frame(width: self.size.width, height: self.size.height)
-                    .opacity(0.5)
+                    .opacity(0.6)
             }
         }.shadow(color: Color(.sRGB, white: 0, opacity: 0.10), radius: 7, x: 5, y: 5)
         .scaleEffect(self.isSelected ? 1.1 : 1)
@@ -247,4 +280,4 @@ struct CardView: View {
     }
 }
 
-public var hosting = UIHostingController(rootView: ContentView(mails: mxs))
+public var hosting = UIHostingController(rootView: ContentView(mails: trainingData, testMails: testData))

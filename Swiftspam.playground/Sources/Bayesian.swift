@@ -52,6 +52,7 @@ public class Classifier: BayesianClassifierDelegate {
                 self.numberOfFrequencyByLabel[doc.label] = (self.numberOfFrequencyByLabel[doc.label] ?? 0) + 1
 
                 self.learningResults[token] = (self.learningResults[token] ?? [doc.label: 0])
+                self.learningResults[token]![doc.label] = (self.learningResults[token]![doc.label] ?? 0)
                 self.learningResults[token]![doc.label]!+=1
             }
         }

@@ -1,13 +1,25 @@
 // Engine
+// public let spamLabel:Label = "spam"
+// public let famLabel:Label = "fam"
+// public famToken:[String] = []
+// public spamToken:[String] = []
 
 public struct Fam {
-    let labelClass: Label = "fam"
-    var token: [String] = []
+    public let labelClass: Label
+    public var token: [String]
+    public init(labelClass: Label = Label("fam"), token: [String] = []){
+        self.labelClass = labelClass
+        self.token = token
+    }
 }
 
 public struct Spam {
-    let labelClass: Label = "spam"
-    var token: [String] = []
+    public let labelClass: Label
+    public var token: [String]
+    public init(labelClass: Label = Label("spam"), token: [String] = []){
+        self.labelClass = labelClass
+        self.token = token
+    }
 }
 
 // Remove duplicates occuring in dataset
@@ -29,7 +41,7 @@ func removeDuplicates(tokens: [String.SubSequence]) -> [String] {
 func preprocess(data: String) -> [String] {
     // Splits into words
     // Remove duplicates
-    return removeDuplicates(tokens: data.split(separator: " "))
+    return removeDuplicates(tokens: data.filterAlphanum.split(separator: " "))
 }
 
 // Adds Fam email to tokens (good list)
@@ -49,6 +61,8 @@ public func train(fam: Fam, spam: Spam) -> Classifier {
         Document(label: fam.labelClass, toke: fam.token),
         Document(label: spam.labelClass, toke: spam.token)
     ])
+    print(Document(label: fam.labelClass, toke: fam.token))
+    print(Document(label: spam.labelClass, toke: spam.token))
     return classifier
 }
 
