@@ -16,15 +16,29 @@ let factor:CGFloat = 0.75
 
 let textColor = Color(.sRGB, white: 0, opacity: 1)
 
-public struct ContentView: View {
-    @State var frame: CGSize = .zero
+enum SpamFam: Int {
+    case spam, fam, none
+}
 
+public struct ContentView: View {
+    @State private var frame: CGSize = .zero // Contains Geometrical dims of current view.
+    @State private var cardDim: CGSize = .zero
+    
     @State private var offset: CGSize = .zero
     @GestureState var isLongPressed = false
-    @State var hasDragged = false
+    
+    @State private var swipeStatus: SpamFam = .none
+    
     @State public var mail: Mail = Mail()
     
-//    @State private var translation: CGSize = .zero
+    func setDims(_ geometry: GeometryProxy) -> some View{
+        DispatchQueue.main.async {
+            self.frame = geometry.size
+            self.cardDim.height = geometry.size.height * factor
+            self.cardDim.width = geometry.size.height * factor * 0.6 //Aspect ratio
+        }
+        return Text("")
+    }
 
     var swipe: some Gesture{
         LongPressGesture()
@@ -32,22 +46,36 @@ public struct ContentView: View {
                     state = value
                 }.simultaneously(with: DragGesture()
                     .onChanged {
-                    self.offset = $0.translation
-//                        self.rotation = $
+                        self.offset = $0.translation
+                        
+                        if $0.translation.width / self.frame.width >= 0.35{
+//                            print("RIGHT")
+                            self.swipeStatus = .fam
+                        } else if $0.translation.width / self.frame.width <= -0.35{
+//                            print("LEFT")
+                            self.swipeStatus = .spam
+                        } else {
+//                            print("NONE")
+                            self.swipeStatus = .none
                         }
-                    .onEnded { _ in withAnimation {
-                    self.offset = .zero
-                        }
-                    print("Hello")
-                    self.hasDragged = true
+                    }
+                    .onEnded { v in withAnimation {
+//                        if abs(v.translation.width/self.frame.width) > 0.35{
+////                            self.onRemove(self.user)
+//                        } else{
+//                            self.offset = .zero
+//                        }
+                        self.offset = .zero
+                        self.swipeStatus = .none
+                    }
                 }
-//                  .opacity(isLongPressed ? 0.3 : 1)
         )
     }
     
     public var body: some View {
         GeometryReader { geometry in
         ZStack {
+            self.setDims(geometry)
             LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: (203/255.0), green: (203/255.0), blue: (160/255.0), opacity: 1.0), Color(.sRGB, red: (181/255.0), green: (181/255.0), blue: (73/255.0), opacity: 1.0)]), startPoint: UnitPoint(x: 1, y: 1), endPoint: UnitPoint(x: 0, y: 0))
                 .edgesIgnoringSafeArea(.all)
 
@@ -57,13 +85,11 @@ public struct ContentView: View {
                 .font(.custom("HelveticaNeue-Thin", size: headingSize))
                 .foregroundColor(.black)
                 .padding(.bottom)
-                // .offset(x:0, y: -((geometry.size.height * factor * 0.6)-((geometry.size.height * factor * 0.6)/10)))
 
-                CardView(cardHeight: geometry.size.height * factor, cardWidth: geometry.size.height * factor * 0.6, mail: self.mail)
+                CardView(spamOrHam: self.swipeStatus, size: self.cardDim, mail: self.mail)
                     .shadow(color: Color(.sRGB, white: 0, opacity: 0.15), radius: 5, x: 10, y: 10)
                     .scaleEffect(self.isLongPressed ? 1.1 : 1)
                     .opacity(self.isLongPressed ? 0.9 : 1)
-                    // .animation(.interactiveSpring())
                     .offset(x: self.offset.width, y: self.offset.height)
                     .rotationEffect(.degrees(Double(self.offset.width / geometry.size.width) * 25), anchor: .bottom)
                     .gesture(self.swipe)
@@ -78,14 +104,13 @@ public struct ContentView: View {
 
 struct CardView: View {
     // States
-    var cardHeight: CGFloat
-    var cardWidth: CGFloat
+    var spamOrHam: SpamFam
+    var size: CGSize
     var mail: Mail
 
     var body: some View {
-//        GeometryReader { geometry in
-        Group{
-                VStack(alignment: .leading) {
+        ZStack{
+            VStack(alignment: .leading) {
                     // Subject Line
                     HStack(alignment: .top, spacing: 5){
                         Text("Subject: ")
@@ -126,11 +151,25 @@ struct CardView: View {
                             .foregroundColor(textColor)
                             .padding(.top)
                     }
-                }.padding(self.cardHeight/20).padding(.top)
-                    .frame(width: self.cardWidth, height: self.cardHeight)
-                 .animation(.interactiveSpring())
-                 .background(Color.white)
-                 .cornerRadius(25)
+            }.padding(self.size.height/20).padding(.top)
+                .frame(width: self.size.width, height: self.size.height)
+                .animation(.interactiveSpring())
+                .background(Color.white)
+                .cornerRadius(25)
+            
+            if self.spamOrHam == .fam{
+                // IT IS A MAIL FROM SPAM
+                RoundedRectangle(cornerRadius: 25, style: .continuous)
+                    .fill(Color.yellow)
+                    .frame(width: self.size.width, height: self.size.height)
+                    .opacity(0.5)
+            } else if self.spamOrHam == .spam{
+                // BEGONE SPAMMER!
+                RoundedRectangle(cornerRadius: 25, style: .continuous)
+                    .fill(Color.red)
+                    .frame(width: self.size.width, height: self.size.height)
+                    .opacity(0.5)
+            }
         }
     }
 }
