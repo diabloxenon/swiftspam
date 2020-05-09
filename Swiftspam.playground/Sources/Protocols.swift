@@ -17,6 +17,7 @@ protocol BayesianClassifierDelegate {
 
 // Mail Anatomy Protocol
 protocol MailDelegate {
+    var id: Int {get set}
     var subject: String {get set}
     var from: String {get set}
     var to: String {get set}

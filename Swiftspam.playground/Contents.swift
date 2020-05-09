@@ -1,7 +1,7 @@
 //let Fam: Label = "fam"
 //let Spam: Label = "spam"
 //
-//var FamToke: [String] = ["good", "better", "best"]
+var FamToke: [String] = ["good", "better", "best"]
 //var SpamToke: [String] = ["bad", "evil", "worst"]
 //
 //var yoo = Classifier(newModel: MultinomialTf)
@@ -17,4 +17,8 @@
 
 import PlaygroundSupport
 
+
 PlaygroundPage.current.setLiveView(hosting)
+
+
+//📬 Swiftspam

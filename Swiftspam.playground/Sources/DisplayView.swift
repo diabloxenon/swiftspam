@@ -6,9 +6,30 @@ import SwiftUI
 //let headingSize:CGFloat = 64
 //let contentSize:CGFloat = 24
 
+var famBoy = Fam()
+var spamBoy = Spam()
+
+var model:Classifier = Classifier(newModel: MultinomialTf)
+
+
+var mxs = [
+    Mail(id: 0, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 1, subject: "Hiya", from: "Naman Bishnoi", to: "Steve Jobs", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 2, subject: "iCloud Bug Bounty", from: "Red Hat", to: "Apple", body: "Find out more!", isSpam: true, reportedAsSpam: false),
+Mail(id: 3, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 4, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 5, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 6, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 7, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 8, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 9, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
+Mail(id: 10),
+    ]
+
+
 // Playgrounds
 // let cardHeight: CGFloat = 500
-let headingSize: CGFloat = 48
+let headingSize: CGFloat = 32
 let contentSize: CGFloat = 16
 
 // Common Constants
@@ -22,19 +43,10 @@ enum SpamFam: Int {
 
 public struct ContentView: View {
     
-    @State public var mails: [Mail] = [
-    Mail(id: 0, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 1, subject: "Hiya", from: "Naman Bishnoi", to: "Steve Jobs", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 2, subject: "iCloud Bug Bounty", from: "Red Hat", to: "Apple", body: "Find out more!", isSpam: true, reportedAsSpam: false),
-Mail(id: 3, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 4, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 5, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 6, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 7, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 8, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 9, subject: "Not Anymore", from: "Naman Bishnoi", to: "XLD", body: "No", isSpam: true, reportedAsSpam: false),
-Mail(id: 10),
-    ]
+    @State public var mails: [Mail]
+    @State private var mail: Mail = Mail()
+    
+    @State private var title: String = "📬 Swiftspam"
     
     @State private var frame: CGSize = .zero // Contains Geometrical dims of current view.
     @State private var cardDim: CGSize = .zero
@@ -47,19 +59,38 @@ Mail(id: 10),
         return EmptyView()
     }
     
-    @State private var mail: Mail = Mail()
-    func assignMail(_ mx: Mail) -> some View{
+    func trainingEmails() -> some View{
         DispatchQueue.main.async{
-            self.mail = mx
+//        self.title = "\(self.mails.count) more to go"
+//        print(self.title)
+        if self.mails.count == 0 {
+            model = train(fam: famBoy, spam: spamBoy)
+            self.title = "Training Done"
+            print(self.title)
         }
-        return EmptyView()
+        }
+        return ZStack{
+            Text("😄")
+                .font(.custom("HelveticaNeue-ThinItalic", size: headingSize))
+                .foregroundColor(.black)
+            ForEach(self.mails, id: \.self) { mail in
+                Group {
+                    // Range Operator
+                    if (self.maxID - 3)...self.maxID ~= mail.id {
+                        CardView(size: self.cardDim, mail: mail, mails: self.$mails, dim: self.frame)
+                            .offset(x: 0, y: self.getCardOffset(id: mail.id))
+                        .animation(.spring())
+                    }
+                }
+            }
+        }
     }
-    
+        
     private var maxID: Int {
         return self.mails.map { $0.id }.max() ?? 0
     }
     
-    private func getCardOffset(_ geometry: GeometryProxy, id: Int) -> CGFloat {
+    private func getCardOffset(id: Int) -> CGFloat {
         return  CGFloat(self.mails.count - 1 - id) * 10
     }
     
@@ -72,24 +103,14 @@ Mail(id: 10),
 
             VStack{
             //Header
-            Text("📬 Swiftspam")
+                Text(self.title)
                 .font(.custom("HelveticaNeue-Thin", size: headingSize))
                 .foregroundColor(.black)
-                .padding(.bottom)
+                .padding(.vertical)
+                
+                // Training Emails
+                self.trainingEmails()
 
-                ZStack{
-                    ForEach(self.mails, id: \.self) { mail in
-//                        self.assignMail(mail)
-                            Group {
-                                // Range Operator
-                                if (self.maxID - 3)...self.maxID ~= mail.id {
-                                    CardView(size: self.cardDim, mail: mail, mails: self.$mails, dim: self.frame)
-                                        .offset(x: 0, y: self.getCardOffset(geometry, id: mail.id))
-                                    .animation(.spring())
-                                }
-                            }
-                        }
-                }
                 Spacer()
             }
         }
@@ -121,11 +142,9 @@ struct CardView: View {
                             if $0.translation.width / self.dim.width >= 0.35{
     //                            print("RIGHT")
                                 self.spamOrHam = .fam
-//                                self.mail.reportedAsSpam = false
                             } else if $0.translation.width / self.dim.width <= -0.35{
     //                            print("LEFT")
                                 self.spamOrHam = .spam
-//                                self.mail.reportedAsSpam = true
                             } else {
     //                            print("NONE")
                                 self.spamOrHam = .none
@@ -133,6 +152,16 @@ struct CardView: View {
                         }
                         .onEnded { v in withAnimation {
                             if abs(v.translation.width/self.dim.width) > 0.35{
+                                
+                                // Add mail data to the list
+                                if self.spamOrHam == .fam {
+                                    addFam(fam: &famBoy, mail: self.mail)
+//                                    print(famBoy)
+                                } else if self.spamOrHam == .spam {
+                                    addSpam(spam: &spamBoy, mail: self.mail)
+//                                    print(spamBoy)
+                                }
+                                
                                 self.mails.removeAll { $0.id == self.mail.id}
     //                            if let index = self.mails.firstIndex(of: self.mail) {
     //                                self.mails.remove(at: index)
@@ -218,4 +247,4 @@ struct CardView: View {
     }
 }
 
-public var hosting = UIHostingController(rootView: ContentView())
+public var hosting = UIHostingController(rootView: ContentView(mails: mxs))
