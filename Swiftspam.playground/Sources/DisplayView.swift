@@ -19,7 +19,10 @@ let contentSize: CGFloat = 16
 // Common Constants
 let factor:CGFloat = 0.75
 
-let textColor = Color(.sRGB, white: 0, opacity: 1)
+let textColor = Color(.sRGB, white: 0, opacity: 0.9)
+
+let spamEmoji:String = "👻"
+let famEmoji:String = "👍🏻"
 
 enum SpamFam: Int {
     case spam, fam, none
@@ -86,24 +89,24 @@ public struct ContentView: View {
     
     func testEmails(_ mx: Mail) -> some View{
         DispatchQueue.main.async{
-            self.title = "🧪 Testing"
-            print(self.title)
+//            self.title = "🧪 Testing"
             self.testResult = test(mail: mx, classifier: model)
             if self.testResult == .FamSpam {
-                self.title = "Anomaly FP"
+                self.title = "⚠️ False ➕"
             }
             if self.testResult == .SpamFam {
-                self.title = "Anomaly FN"
+                self.title = "⚠️ False ➖"
             }
             if self.testResult == .SpamSpam {
-                self.title = "SPAM!"
+                self.title = "\(spamEmoji) Spam"
             }
             if self.testResult == .FamFam {
-                self.title = "Fam!"
+                self.title = "\(famEmoji) Fam"
             }
             if self.testMails.count == 0 {
                 self.stats = .testingDone
             }
+            print(self.title)
         }
         return Group {
             // Range Operator
@@ -132,7 +135,7 @@ public struct ContentView: View {
         GeometryReader { geometry in
         ZStack {
             self.setDims(geometry)
-            LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: (203/255.0), green: (203/255.0), blue: (160/255.0), opacity: 1.0), Color(.sRGB, red: (181/255.0), green: (181/255.0), blue: (73/255.0), opacity: 1.0)]), startPoint: UnitPoint(x: 1, y: 1), endPoint: UnitPoint(x: 0, y: 0))
+            LinearGradient(gradient: Gradient(colors: [Color.swiftspamBG1, Color.swiftspamBG2]), startPoint: UnitPoint(x: 1, y: 1), endPoint: UnitPoint(x: 0, y: 0))
                 .edgesIgnoringSafeArea(.all)
 
             VStack{
@@ -296,12 +299,12 @@ struct CardView: View {
             }.padding(self.size.height/20).padding(.top)
                 .frame(width: self.size.width, height: self.size.height)
                 .animation(.interactiveSpring())
-                .background(Color.white)
+                .background(LinearGradient(gradient: Gradient(colors: [Color.swiftspamCardBG1, Color.swiftspamCardBG2]), startPoint: UnitPoint(x: 1, y: 1), endPoint: UnitPoint(x: 0, y: 0)).edgesIgnoringSafeArea(.all))
                 .cornerRadius(25)
             
             if self.toggleInfo {
                 VStack(alignment: .leading){
-                        Text(self.mail.isSpam ? "🚫 Spam" : "👍🏻 Fam" )
+                    Text(self.mail.isSpam ? "\(spamEmoji) Spam" : "\(famEmoji) Fam" )
                             .font(.custom("HelveticaNeue-Thin", size: headingSize))
                             .foregroundColor(Color.white)
                             .padding(.all)
@@ -321,24 +324,45 @@ struct CardView: View {
                           .foregroundColor(Color.blue)
                     }
                 }.padding(self.size.height/20).padding(.top)
-                .background(Color.black)
+                .background(LinearGradient(gradient: Gradient(colors: [Color.swiftspamInfoBG1, Color.swiftspamInfoBG2]), startPoint: UnitPoint(x: 1, y: 1), endPoint: UnitPoint(x: 0, y: 0)).edgesIgnoringSafeArea(.all))
                 .frame(width: self.size.width, height: self.size.height)
                 .cornerRadius(25)
-                .animation(.spring())
             }
             
             if self.spamOrHam == .fam{
                 // IT IS A MAIL FROM SPAM
-                RoundedRectangle(cornerRadius: 25, style: .continuous)
-                    .fill(Color.yellow)
-                    .frame(width: self.size.width, height: self.size.height)
-                    .opacity(0.6)
+                VStack{
+                    Spacer()
+                    HStack{
+                        // Spacer()
+                        Text(famEmoji)
+                            .font(.custom("HelveticaNeue-Thin", size: 80))
+                            .foregroundColor(Color.white)
+                            .padding(.all)
+                        Spacer()
+                    }
+                    // Spacer()
+                }.background(Color.yellow)
+                .frame(width: self.size.width, height: self.size.height)
+                .cornerRadius(25)
+                .opacity(0.7)
             } else if self.spamOrHam == .spam{
                 // BEGONE SPAMMER!
-                RoundedRectangle(cornerRadius: 25, style: .continuous)
-                    .fill(Color.red)
-                    .frame(width: self.size.width, height: self.size.height)
-                    .opacity(0.6)
+                VStack{
+                    Spacer()
+                    HStack{
+                        Spacer()
+                        Text(spamEmoji)
+                            .font(.custom("HelveticaNeue-Thin", size: 80))
+                            .foregroundColor(Color.white)
+                            .padding(.all)
+                        // Spacer()
+                    }
+                    // Spacer()
+                }.background(Color.red)
+                .frame(width: self.size.width, height: self.size.height)
+                .cornerRadius(25)
+                .opacity(0.7)
             }
         }.shadow(color: Color(.sRGB, white: 0, opacity: 0.10), radius: 7, x: 5, y: 5)
         .scaleEffect(self.isSelected ? 1.1 : 1)
