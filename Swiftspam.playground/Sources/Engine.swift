@@ -1,9 +1,4 @@
 // Engine
-// public let spamLabel:Label = "spam"
-// public let famLabel:Label = "fam"
-// public famToken:[String] = []
-// public spamToken:[String] = []
-
 public struct Fam {
     public let labelClass: Label
     public var token: [String]
@@ -20,6 +15,10 @@ public struct Spam {
         self.labelClass = labelClass
         self.token = token
     }
+}
+
+public enum Results:Int {
+    case SpamSpam, SpamFam, FamSpam, FamFam, None
 }
 
 // Remove duplicates occuring in dataset
@@ -67,7 +66,19 @@ public func train(fam: Fam, spam: Spam) -> Classifier {
 }
 
 // Tests the model on Test Mail sample.
-public func test(mail: Mail, classifier: Classifier) -> Bool {
+public func test(mail: Mail, classifier: Classifier) -> Results {
     var (allScores, label, certain) = classifier.classify(tokens: preprocess(data: mail.body))
-    return label == "spam" ? true : false
+    // return label == "spam" ? true : false
+    print(allScores, label, certain, mail.isSpam)
+    if label=="spam" && mail.isSpam {
+        return Results.SpamSpam
+    } else if label=="fam" && !mail.isSpam {
+        return Results.FamFam
+    } else if label=="spam" && !mail.isSpam {
+        return Results.SpamFam
+    } else if label=="fam" && mail.isSpam {
+        return Results.FamSpam
+    } else {
+        return Results.None
+    }
 }

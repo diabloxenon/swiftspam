@@ -33,6 +33,7 @@ public struct ContentView: View {
     
     @State private var title: String = "📬 Swiftspam"
     @State private var stats: Status = .start
+    @State private var testResult: Results = .None
     
     enum Status: Int {
         case start, trainingDone, testingDone
@@ -49,11 +50,23 @@ public struct ContentView: View {
         return EmptyView()
     }
     
-    func trainingEmails() -> some View{
+    private var mailsMaxID: Int {
+        return self.mails.map { $0.id }.max() ?? 0
+    }
+    
+    private var testMailsMaxID: Int {
+        return self.testMails.map { $0.id }.max() ?? 0
+    }
+    
+    private func getCardOffset(mails: [Mail], id: Int) -> CGFloat {
+        return  CGFloat(mails.count - 1 - id) * 10
+    }
+    
+    func trainingEmails(_ mx: Mail) -> some View{
         DispatchQueue.main.async{
 //        self.title = "\(self.mails.count) more to go"
 //        print(self.title)
-        if self.mails.count == 0 {
+        if self.mails.count == 1 {
 //            print("BP 1 familiar mails: \(famBoy) spam mails: \(spamBoy)")
             model = train(fam: famBoy, spam: spamBoy)
             self.title = "Training Done"
@@ -61,34 +74,49 @@ public struct ContentView: View {
             self.stats = .trainingDone
         }
         }
-        return ZStack{
-            Text("😄")
-                .font(.custom("HelveticaNeue-ThinItalic", size: 64))
-                .foregroundColor(.black)
-            ForEach(self.mails, id: \.self) { mail in
-                Group {
-                    // Range Operator
-                    if (self.maxID - 3)...self.maxID ~= mail.id {
-                        CardView(size: self.cardDim, mail: mail, mails: self.$mails, dim: self.frame)
-                            .offset(x: 0, y: self.getCardOffset(id: mail.id))
-                        .animation(.spring())
-                    }
-                }
+        return Group {
+            // Range Operator
+            if (self.mailsMaxID - 3)...self.mailsMaxID ~= mx.id {
+                CardView(size: self.cardDim, mail: mx, mails: self.$mails, dim: self.frame)
+                    .offset(x: 0, y: self.getCardOffset(mails: self.mails, id: mx.id))
+                .animation(.spring())
             }
         }
     }
     
-    func testEmails() -> some View{
+    func testEmails(_ mx: Mail) -> some View{
         DispatchQueue.main.async{
             self.title = "🧪 Testing"
             print(self.title)
-            let spam = test(mail: self.mail, classifier: model)
-            if spam == true{
-                self.title = "Spam"
+            self.testResult = test(mail: mx, classifier: model)
+            if self.testResult == .FamSpam {
+                self.title = "Anomaly FP"
+            }
+            if self.testResult == .SpamFam {
+                self.title = "Anomaly FN"
+            }
+            if self.testResult == .SpamSpam {
+                self.title = "SPAM!"
+            }
+            if self.testResult == .FamFam {
+                self.title = "Fam!"
+            }
+            if self.testMails.count == 1{
+                self.stats = .testingDone
             }
         }
-        return ZStack{
-            VStack{
+        return Group {
+            // Range Operator
+            if (self.testMailsMaxID - 3)...self.testMailsMaxID ~= mx.id {
+                CardView(size: self.cardDim, mail: mx, mails: self.$testMails, dim: self.frame)
+                    .offset(x: 0, y: self.getCardOffset(mails: self.testMails, id: mx.id))
+                .animation(.spring())
+            }
+        }
+    }
+    
+    func congrats() -> some View {
+        return VStack{
             HStack{
                 Text("🎉").font(.custom("HelveticaNeue-ThinItalic", size: 64))
                 Spacer()
@@ -97,28 +125,7 @@ public struct ContentView: View {
                 Text("🎉").font(.custom("HelveticaNeue-ThinItalic", size: 64)).rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
             }.padding(.all)
                 Text("🏆").font(.custom("HelveticaNeue-ThinItalic", size: 64))
-            }
-//            .frame(width: self.cardDim.width, height: 0)
-            
-            ForEach(self.testMails, id: \.self) { mail in
-                Group {
-                    // Range Operator
-                    if (self.maxID - 3)...self.maxID ~= mail.id {
-                        CardView(size: self.cardDim, mail: mail, mails: self.$testMails, dim: self.frame)
-                            .offset(x: 0, y: self.getCardOffset(id: mail.id))
-                        .animation(.spring())
-                    }
-                }
-            }
         }
-    }
-        
-    private var maxID: Int {
-        return self.mails.map { $0.id }.max() ?? 0
-    }
-    
-    private func getCardOffset(id: Int) -> CGFloat {
-        return  CGFloat(self.mails.count - 1 - id) * 10
     }
     
     public var body: some View {
@@ -135,13 +142,27 @@ public struct ContentView: View {
                 .foregroundColor(.black)
                 .padding(.vertical)
                 
-                // Training Emails
-                if self.stats == .start{
-                    self.trainingEmails()
-                }
-                
-                if self.stats == .trainingDone {
-                    self.testEmails()
+                ZStack{
+                    // Training Emails
+                    if self.stats == .start{
+//                        ZStack{
+                        ForEach(self.mails, id: \.self) { mail in
+                            self.trainingEmails(mail)
+                        }
+//                        }
+                    }
+                    
+                    if self.stats == .trainingDone {
+//                        ZStack{
+                        ForEach(self.testMails, id: \.self) { mail in
+                            self.testEmails(mail)
+                        }
+//                        }
+                    }
+                    
+                    if self.stats == .testingDone {
+                        self.congrats()
+                    }
                 }
 
                 Spacer()
