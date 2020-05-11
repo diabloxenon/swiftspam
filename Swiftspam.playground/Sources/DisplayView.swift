@@ -25,6 +25,10 @@ enum SpamFam: Int {
     case spam, fam, none
 }
 
+enum Status: Int {
+    case start, trainingDone, testingDone
+}
+
 public struct ContentView: View {
     
     @State public var mails: [Mail]
@@ -34,10 +38,6 @@ public struct ContentView: View {
     @State private var title: String = "📬 Swiftspam"
     @State private var stats: Status = .start
     @State private var testResult: Results = .None
-    
-    enum Status: Int {
-        case start, trainingDone, testingDone
-    }
     
     @State private var frame: CGSize = .zero // Contains Geometrical dims of current view.
     @State private var cardDim: CGSize = .zero
@@ -77,7 +77,7 @@ public struct ContentView: View {
         return Group {
             // Range Operator
             if (self.mailsMaxID - 3)...self.mailsMaxID ~= mx.id {
-                CardView(size: self.cardDim, mail: mx, mails: self.$mails, dim: self.frame)
+                CardView(size: self.cardDim, mail: mx, mails: self.$mails, dim: self.frame, stats: self.stats)
                     .offset(x: 0, y: self.getCardOffset(mails: self.mails, id: mx.id))
                 .animation(.spring())
             }
@@ -101,14 +101,14 @@ public struct ContentView: View {
             if self.testResult == .FamFam {
                 self.title = "Fam!"
             }
-            if self.testMails.count == 1{
+            if self.testMails.count == 0 {
                 self.stats = .testingDone
             }
         }
         return Group {
             // Range Operator
             if (self.testMailsMaxID - 3)...self.testMailsMaxID ~= mx.id {
-                CardView(size: self.cardDim, mail: mx, mails: self.$testMails, dim: self.frame)
+                CardView(size: self.cardDim, mail: mx, mails: self.$testMails, dim: self.frame, stats: self.stats)
                     .offset(x: 0, y: self.getCardOffset(mails: self.testMails, id: mx.id))
                 .animation(.spring())
             }
@@ -145,19 +145,15 @@ public struct ContentView: View {
                 ZStack{
                     // Training Emails
                     if self.stats == .start{
-//                        ZStack{
                         ForEach(self.mails, id: \.self) { mail in
                             self.trainingEmails(mail)
                         }
-//                        }
                     }
                     
                     if self.stats == .trainingDone {
-//                        ZStack{
                         ForEach(self.testMails, id: \.self) { mail in
                             self.testEmails(mail)
                         }
-//                        }
                     }
                     
                     if self.stats == .testingDone {
@@ -175,11 +171,11 @@ public struct ContentView: View {
 struct CardView: View {
     // States
     var size: CGSize
-//    @Binding var mail: Mail
     var mail: Mail
     @Binding var mails: [Mail]
     @State private var spamOrHam: SpamFam = .none
     var dim: CGSize
+    var stats: Status
     
     @State private var offset: CGSize = .zero
     @State private var toggleInfo = false
@@ -194,6 +190,7 @@ struct CardView: View {
                         .onChanged {
                             self.offset = $0.translation
                             
+                        if self.stats == .start {
                             if $0.translation.width / self.dim.width >= 0.35{
     //                            print("RIGHT")
                                 self.spamOrHam = .fam
@@ -204,19 +201,26 @@ struct CardView: View {
     //                            print("NONE")
                                 self.spamOrHam = .none
                             }
+                        } else if self.stats == .trainingDone {
+                            // TODO: Remove the self.mail.isSpam and link it with actual predictions.
+                            if self.mail.isSpam{
+                                self.spamOrHam = .spam
+                                self.offset.width = self.dim.width * -0.35
+                            } else {
+                                self.spamOrHam = .fam
+                                self.offset.width = self.dim.width * 0.35
+                            }
+                        }
+
                         }
                         .onEnded { v in withAnimation {
                             if abs(v.translation.width/self.dim.width) > 0.35{
-                                
                                 // Add mail data to the list
-                                if self.spamOrHam == .fam {
+                                if self.spamOrHam == .fam && self.stats == .start {
                                     addFam(fam: &famBoy, mail: self.mail)
-//                                    print(famBoy)
-                                } else if self.spamOrHam == .spam {
+                                } else if self.spamOrHam == .spam && self.stats == .start {
                                     addSpam(spam: &spamBoy, mail: self.mail)
-//                                    print(spamBoy)
                                 }
-                                
                                 self.mails.removeAll { $0.id == self.mail.id}
     //                            if let index = self.mails.firstIndex(of: self.mail) {
     //                                self.mails.remove(at: index)
@@ -275,6 +279,20 @@ struct CardView: View {
                         Spacer()
                     }
                     Spacer()
+                
+                Button(action : {
+                   //Button action goes here
+                    self.toggleInfo = true
+                }){
+                   //Button Text Properties
+                   Text("Learn More") // Button Text
+//                      .fontWeight(.heavy) // Button Text Weight
+//                      .padding() // Padding to the button
+//                      .background(Color.orange) // Button Background Color
+                      .foregroundColor(Color.purple) // Button text color
+//                      .cornerRadius(10.0) // Button corner radius property
+                }
+                
             }.padding(self.size.height/20).padding(.top)
                 .frame(width: self.size.width, height: self.size.height)
                 .animation(.interactiveSpring())
@@ -282,18 +300,31 @@ struct CardView: View {
                 .cornerRadius(25)
             
             if self.toggleInfo {
-                VStack{
+                VStack(alignment: .leading){
+                        Text(self.mail.isSpam ? "🚫 Spam" : "👍🏻 Fam" )
+                            .font(.custom("HelveticaNeue-Thin", size: headingSize))
+                            .foregroundColor(Color.white)
+                            .padding(.all)
                     HStack{
                         Text(self.mail.description)
                             .font(.custom("HelveticaNeue-Light", size: contentSize))
                             .foregroundColor(Color.white)
-                            .padding(.top)
-                            Spacer()
-                    }.padding(.all)
+                        Spacer()
+                    }
+                    
                     Spacer()
-                }.background(Color.black)
+                    
+                    Button(action : {
+                        self.toggleInfo = false
+                    }){
+                       Text("Read Mail") // Button Text
+                          .foregroundColor(Color.blue)
+                    }
+                }.padding(self.size.height/20).padding(.top)
+                .background(Color.black)
                 .frame(width: self.size.width, height: self.size.height)
                 .cornerRadius(25)
+                .animation(.spring())
             }
             
             if self.spamOrHam == .fam{
