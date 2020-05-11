@@ -69,7 +69,7 @@ public func train(fam: Fam, spam: Spam) -> Classifier {
 public func test(mail: Mail, classifier: Classifier) -> Results {
     var (allScores, label, certain) = classifier.classify(tokens: preprocess(data: mail.body))
     // return label == "spam" ? true : false
-    print(allScores, label, certain, mail.isSpam)
+    // print(allScores, label, certain, mail.isSpam)
     if label=="spam" && mail.isSpam {
         return Results.SpamSpam
     } else if label=="fam" && !mail.isSpam {

@@ -87,7 +87,7 @@ public var trainingData = [
         subject: "RE: Verification Required #27556566", 
         from: "idiotspammer@hax0r.com", 
         to: "Naman Bishnoi", 
-        body: "INFO : Required-095-85579783-00 More Information please check attachment file [PDF] \n\n Your Apple ID was used to sign in to ICLoud via a Web Browser\nAAPL_TRPB_1_6075253244.pdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 
+        body: "INFO : Required-095-85579783-00 More Information please check attachment file [PDF] \n\n Your Apple ID was used to sign in to ICLoud via a Web Browser\nAAPL_TRPB_1_6075253244.pdf", 
         isSpam: true, 
         description: "false"),
     
@@ -105,7 +105,7 @@ public var trainingData = [
         subject: "RE:", 
         from: "Sinister Six", 
         to: "Naman Bishnoi", 
-        body: "You have emerged as one of the lucky winners in the Guinness Brewery Promo, to receive €650,000.00. Kindly contact guinness004@outlook.de with your name age phone number occupation and address\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 
+        body: "You have emerged as one of the lucky winners in the Guinness Brewery Promo, to receive €650,000.00. Kindly contact guinness004@outlook.de with your name age phone number occupation and address", 
         isSpam: true, 
         description: "false"),
     
@@ -114,7 +114,7 @@ public var trainingData = [
         subject: "Ready. Set. Code.", 
         from: "Apple Developer", 
         to: "Naman Bishnoi", 
-        body: "👨🏻‍💻 On June 22, WWDC20 takes off. Get ready for the first global, all-online WWDC by downloading the Apple Developer app to stay notified on all the latest news, with updates for events and sessions. And there’s a lot more to come — starting with the first-ever Swift Student Challenge. <Learn More>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", 
+        body: "👨🏻‍💻 On June 22, WWDC20 takes off. Get ready for the first global, all-online WWDC by downloading the Apple Developer app to stay notified on all the latest news, with updates for events and sessions. And there’s a lot more to come — starting with the first-ever Swift Student Challenge. <Learn More>", 
         isSpam: false, 
         description: "false"),
     
@@ -192,21 +192,21 @@ public var trainingData = [
     
     Mail(
         id: 17, 
-        subject: "Not Anymore", 
-        from: "Naman Bishnoi", 
-        to: "XLD", 
-        body: "No", 
+        subject: "SAVE YOUR STUFF! Sign in to your Nokia account before it disappears forever!",
+        from: "Nokia <info@nok1a.com>", 
+        to: "Naman Bishnoi", 
+        body: "SAVE YOUR STUFF!\nWe noticed you haven't used Nokia account to access Nokia services in quite a while. To protect your privacy, this account will be deleted in 14 days, so sign in now.\n If you haven't experienced Nokia services recently, they're worth another look. And you may want to keep any maps, locations, email, music, reviews, or other stuff that is associated with your account.\n\nIt just takes few seconds to sign in to your Nokia account.\n\nWe hope to see you soon.\n\n Sincerely,\n The Nokia account team", 
         isSpam: true, 
-        description: "false"),
+        description: "Although very convincing, the real Nokia wouldn't be sending you a 'Save your stuff' email from info@nok1a.com and moreover you can see how the email name <nok1a.com> differs from the real domain <nokia.com>"),
     
     Mail(
         id: 18, 
-        subject: "Not Anymore", 
-        from: "Naman Bishnoi", 
-        to: "XLD", 
-        body: "No", 
+        subject: "Information",
+        from: "Manager Sam Porter Bridges", 
+        to: "Naman Bishnoi", 
+        body: "<html><body><a href='http://gogogo.world'>Notification\nOur courier couldnt make the delivery of parcel to you at 20th August.\n Print label and show it in the nearest post office.</a></body></html>", 
         isSpam: true, 
-        description: "false"),
+        description: "This whole email was a gigantic hyperlink, so if you clicked anywhere in the email, you would initiate the malicious attack."),
     
     Mail(
         id: 19, 
@@ -222,9 +222,9 @@ public var trainingData = [
         subject: "Special Order Delivery Problem", 
         from: "Naman Bishnoi", 
         to: "XLD", 
-        body: "No", 
+        body: "Sir/Madam,\n\nYour order BBY-4983814314 has not been delivered because the specified address was not correct.\nPlease fill this form and send it back with your reply to this message.\n\n\nIf we do not receive your reply within a week we will pay your money back less 17 because your order was reserved for the time of Christmas holidays.", 
         isSpam: true, 
-        description: "false"),
+        description: "Legit companies know how to spell, In addition to the generic salutation, grammar gaffes are usually a good clue that something is wrong. 'Please fill this form…' And notice the ‘17’ reference in the middle of the sentence."),
     
     Mail(
         id: 21, 
@@ -249,7 +249,7 @@ public var trainingData = [
         subject: "Scheduled Home Delivery Problem", 
         from: "Costco Shipping Agent <manager@cbcbuilding.com", 
         to: "Naman Bishnoi", 
-        body: "Costco®\nUnfortunately the delivery of your order COS-0077945599 was cancelled since the specified address of the recepient was not correct. You are recommended to complete this form and send it back with your reply to us.\nPlease do this within the period of one week - if we don't get your timely reply you will be paid your money back less 21% since your order was booked from Chrismas. \n\n\n\n\n\n\n\n\n\n\n\n\n\n", 
+        body: "Costco®\nUnfortunately the delivery of your order COS-0077945599 was cancelled since the specified address of the recepient was not correct. You are recommended to complete this form and send it back with your reply to us.\nPlease do this within the period of one week - if we don't get your timely reply you will be paid your money back less 21% since your order was booked from Chrismas. ", 
         isSpam: true, 
         description: "Legit companies have domain emails, "),
     
@@ -303,7 +303,7 @@ public var trainingData = [
         subject: "Restore your account", 
         from: "PayTrans <VT@paytrans.com>", 
         to: "Naman Bishnoi", 
-        body: "Dear customer,\nWe regret to inform you that your account has been restricted.\nTo continue using our services please download the file attached to this e-mail and update your login information.\n\nCopyright, PaymentTransferInc\n\n\n[update2816.html]\n\n\n\n\n\n\n\n\n\n\n", 
+        body: "Dear customer,\nWe regret to inform you that your account has been restricted.\nTo continue using our services please download the file attached to this e-mail and update your login information.\n\nCopyright, PaymentTransferInc\n\n\n[update2816.html]", 
         isSpam: true, 
         description: "Legit companies don’t request your sensitive information via email. Notice the generic salutation at the beginning, and the unsolicited web link attachment?"),
     

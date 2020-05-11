@@ -182,6 +182,7 @@ struct CardView: View {
     var dim: CGSize
     
     @State private var offset: CGSize = .zero
+    @State private var toggleInfo = false
     
     @GestureState var isSelected = false
     
@@ -238,7 +239,7 @@ struct CardView: View {
                             .font(.custom("HelveticaNeue-Bold", size: contentSize))
                             .foregroundColor(textColor)
 
-                        Text("\(self.mail.subject)")
+                        Text(self.mail.subject)
                             .font(.custom("HelveticaNeue-Light", size: contentSize))
                             .foregroundColor(textColor)
                     }
@@ -249,7 +250,7 @@ struct CardView: View {
                             .font(.custom("HelveticaNeue-Bold", size: contentSize))
                             .foregroundColor(textColor)
 
-                        Text("\(self.mail.from)")
+                        Text(self.mail.from)
                             .font(.custom("HelveticaNeue-Light", size: contentSize))
                             .foregroundColor(textColor)
                     }
@@ -260,23 +261,40 @@ struct CardView: View {
                             .font(.custom("HelveticaNeue-Bold", size: contentSize))
                             .foregroundColor(textColor)
 
-                        Text("\(self.mail.to)")
+                        Text(self.mail.to)
                             .font(.custom("HelveticaNeue-Light", size: contentSize))
                             .foregroundColor(textColor)
                     }
 
                     HStack {
                         // Body
-                        Text("\(self.mail.body)")
+                        Text(self.mail.body)
                             .font(.custom("HelveticaNeue-Light", size: contentSize))
                             .foregroundColor(textColor)
                             .padding(.top)
+                        Spacer()
                     }
+                    Spacer()
             }.padding(self.size.height/20).padding(.top)
                 .frame(width: self.size.width, height: self.size.height)
                 .animation(.interactiveSpring())
                 .background(Color.white)
                 .cornerRadius(25)
+            
+            if self.toggleInfo {
+                VStack{
+                    HStack{
+                        Text(self.mail.description)
+                            .font(.custom("HelveticaNeue-Light", size: contentSize))
+                            .foregroundColor(Color.white)
+                            .padding(.top)
+                            Spacer()
+                    }.padding(.all)
+                    Spacer()
+                }.background(Color.black)
+                .frame(width: self.size.width, height: self.size.height)
+                .cornerRadius(25)
+            }
             
             if self.spamOrHam == .fam{
                 // IT IS A MAIL FROM SPAM
