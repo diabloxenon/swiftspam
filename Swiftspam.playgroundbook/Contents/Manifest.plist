@@ -4,22 +4,22 @@
 <dict>
 	<key>Chapters</key>
 	<array>
-		<string>Shapes.playgroundchapter</string>
+		<string>Swiftspam.playgroundchapter</string>
 	</array>
 	<key>ContentIdentifier</key>
-	<string>com.apple.playgrounds.Shapes</string>
+	<string>rocks.naman.playgrounds.Swiftspam</string>
 	<key>ContentVersion</key>
-	<string>3.0.2</string>
+	<string>4.0.2</string>
 	<key>DeploymentTarget</key>
-	<string>ios12.0</string>
+	<string>ios13.0</string>
 	<key>DevelopmentRegion</key>
 	<string>en</string>
 	<key>ImageReference</key>
 	<string>Shapes.png</string>
 	<key>MinimumSwiftPlaygroundsVersion</key>
-	<string>3.1</string>
+	<string>5.1</string>
 	<key>Name</key>
-	<string>Shapes</string>
+	<string>Swiftspam</string>
 	<key>SupportsDarkMode</key>
 	<true/>
 	<key>SwiftVersion</key>
@@ -31,6 +31,6 @@
 	<key>UserModuleMode</key>
 	<string>Full</string>
 	<key>Version</key>
-	<string>6.1</string>
+	<string>7.1</string>
 </dict>
 </plist>
