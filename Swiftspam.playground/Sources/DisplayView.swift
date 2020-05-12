@@ -38,7 +38,7 @@ public struct ContentView: View {
     @State public var testMails: [Mail]
     @State private var mail: Mail = Mail()
     
-    @State private var title: String = "📬 Swiftspam"
+    @State private var title: String = "📨 Swiftspam"
     @State private var stats: Status = .start
     @State private var testResult: Results = .None
     
@@ -342,10 +342,10 @@ struct CardView: View {
                         Spacer()
                     }
                     // Spacer()
-                }.background(Color.yellow)
+                }.background(Color.green)
                 .frame(width: self.size.width, height: self.size.height)
                 .cornerRadius(25)
-                .opacity(0.7)
+                .opacity(0.65)
             } else if self.spamOrHam == .spam{
                 // BEGONE SPAMMER!
                 VStack{
@@ -362,10 +362,10 @@ struct CardView: View {
                 }.background(Color.red)
                 .frame(width: self.size.width, height: self.size.height)
                 .cornerRadius(25)
-                .opacity(0.7)
+                .opacity(0.65)
             }
         }.shadow(color: Color(.sRGB, white: 0, opacity: 0.10), radius: 7, x: 5, y: 5)
-        .scaleEffect(self.isSelected ? 1.1 : 1)
+            .scaleEffect(self.isSelected ? 1.05 : 1)
         .opacity(self.isSelected ? 0.9 : 1)
         .offset(x: self.offset.width, y: self.offset.height)
         .rotationEffect(.degrees(Double(self.offset.width / dim.width) * 25), anchor: .bottom)
