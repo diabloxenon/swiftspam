@@ -17,7 +17,7 @@
 	<key>ImageReference</key>
 	<string>Shapes.png</string>
 	<key>MinimumSwiftPlaygroundsVersion</key>
-	<string>5.1</string>
+	<string>3.3</string>
 	<key>Name</key>
 	<string>Swiftspam</string>
 	<key>SupportsDarkMode</key>
