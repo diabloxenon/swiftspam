@@ -250,11 +250,13 @@ struct MailView: View {
             Text("\(desc): ")
                 .font(.custom("HelveticaNeue-Bold", size: contentSize))
                 .foregroundColor(textColor)
+                .lineSpacing(1.2)
             }
 
             Text(mailData)
                 .font(.custom("HelveticaNeue-Light", size: contentSize))
                 .foregroundColor(textColor)
+                .lineSpacing(1.2)
 
             Spacer()
         }
@@ -322,6 +324,7 @@ struct MailView: View {
                 Text(self.mail.description)
                     .font(.custom("HelveticaNeue-Light", size: contentSize))
                     .foregroundColor(Color.white)
+                    .lineSpacing(1.2)
                 Spacer()
             }
             
