@@ -11,6 +11,7 @@ var model:Classifier = Classifier(newModel: MultinomialTf)
 
 // Common Constants
 let factor:CGFloat = 0.75
+let flickRatio:CGFloat = 0.25
 
 let textColor = Color(.sRGB, white: 0, opacity: 0.8)
 
@@ -26,7 +27,6 @@ enum Status: Int {
 }
 
 public struct ContentView: View {
-    
     @State public var mails: [Mail]
     @State public var testMails: [Mail]
     @State private var mail: Mail = Mail()
@@ -37,6 +37,8 @@ public struct ContentView: View {
     
     @State private var frame: CGSize = .zero // Contains Geometrical dims of current view.
     @State private var cardDim: CGSize = .zero
+    @State private var moveCongratsHeight: CGFloat = 0
+
     func setDims(_ geometry: GeometryProxy) -> some View{
         DispatchQueue.main.async {
             self.frame = geometry.size
@@ -106,9 +108,6 @@ public struct ContentView: View {
             if self.testResult == .FamFam {
                 self.title = "\(famEmoji) Fam"
             }
-            if self.testMails.count == 0 {
-                self.stats = .testingDone
-            }
             // print(self.title)
         }
         return Group {
@@ -122,6 +121,13 @@ public struct ContentView: View {
     }
     
     func congrats() -> some View {
+        DispatchQueue.main.async{
+            if self.testMails.count == 0 {
+                self.stats = .testingDone
+                self.title = "🧪 Testing Done"
+                self.moveCongratsHeight = self.cardDim.height * 0.5
+            }
+        }
         return VStack{
             HStack{
                 Text("🎉").font(.custom("HelveticaNeue-ThinItalic", size: 64))
@@ -131,7 +137,8 @@ public struct ContentView: View {
                 Text("🎉").font(.custom("HelveticaNeue-ThinItalic", size: 64)).rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
             }.padding(.all)
                 Text("🏆").font(.custom("HelveticaNeue-ThinItalic", size: 64))
-        }
+        }.frame(width: self.cardDim.width, height: self.cardDim.height - self.moveCongratsHeight)
+        .animation(.spring())
     }
     
     public var body: some View {
@@ -157,6 +164,7 @@ public struct ContentView: View {
                     }
                     
                     if self.stats == .trainingDone {
+                        self.congrats()
                         ForEach(self.testMails, id: \.self) { mail in
                             self.testEmails(mail)
                         }
@@ -198,16 +206,16 @@ struct MailView: View {
                 }.simultaneously(with: DragGesture()
                 .onChanged {
                     self.offset = $0.translation
-                    if $0.translation.width / self.dim.width >= 0.35{
+                    if $0.translation.width / self.dim.width >= flickRatio{
                         self.spamOrHam = .fam
-                    } else if $0.translation.width / self.dim.width <= -0.35{
+                    } else if $0.translation.width / self.dim.width <= -flickRatio{
                         self.spamOrHam = .spam
                     } else {
                         self.spamOrHam = .none
                     }
                 }
                 .onEnded { v in withAnimation {
-                    if abs(v.translation.width/self.dim.width) > 0.35{
+                    if abs(v.translation.width/self.dim.width) > flickRatio{
                         // Add mail data to the list
                         if self.spamOrHam == .fam {
                             addFam(fam: &famBoy, mail: self.mail)
@@ -234,10 +242,10 @@ struct MailView: View {
                     // TODO: Remove the self.mail.isSpam and link it with actual predictions.
                     if self.result == .FamSpam || self.result == .SpamSpam {
                         self.spamOrHam = .spam
-                        self.offset.width = self.dim.width * -0.35
+                        self.offset.width = self.dim.width * -flickRatio
                     } else if self.result == .SpamFam || self.result == .FamFam {
                         self.spamOrHam = .fam
-                        self.offset.width = self.dim.width * 0.35
+                        self.offset.width = self.dim.width * flickRatio
                     }
                     self.isDeleted = true
                 }
@@ -289,6 +297,7 @@ struct MailView: View {
                 Group{
                     cardView
                     if self.toggleInfo {
+                        // See Description here.
                         infoView
                     }
                     if self.spamOrHam == .fam{
@@ -309,6 +318,7 @@ struct MailView: View {
                 Group{
                     cardView
                     if self.toggleInfo {
+                        // See Description here.
                         infoView
                     }
                     if self.spamOrHam == .fam{
