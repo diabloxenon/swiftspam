@@ -3,16 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>TemplatePageFilename</key>
-	<string>Template.playgroundpage</string>
+	<string>Intro.playgroundpage</string>
 	<key>Version</key>
 	<string>1.1</string>
 	<key>Name</key>
 	<string>Swiftspam</string>
 	<key>InitialUserPages</key>
 	<array>
-		<string>Canvas.playgroundpage</string>
-		<string>Create.playgroundpage</string>
-		<string>Touch.playgroundpage</string>
+		<string>Intro.playgroundpage</string>
+		<string>Credits.playgroundpage</string>
 	</array>
 </dict>
 </plist>

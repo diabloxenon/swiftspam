@@ -5,11 +5,15 @@
 	<key>Version</key>
 	<string>1.0</string>
 	<key>Name</key>
-	<string>Animation</string>
+	<string>Spam or Fam?</string>
 	<key>LiveViewMode</key>
 	<string>VisibleByDefault</string>
 	<key>LiveViewEdgeToEdge</key>
 	<true/>
+	<key>UserModuleSourceFilesToOpen</key>
+	<array>
+		<string>UserModules/MyFiles.playgroundmodule/Sources/SharedCode.swift</string>
+	</array>
 	<key>UserModuleCodeCompletionDirectives</key>
 	<array>
 		<string>module, hide, Swift</string>
