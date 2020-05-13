@@ -236,7 +236,7 @@ struct MailView: View {
 
     private func infoButton(_ desc: String) -> some View{
         return Button(action : {
-                self.toggleInfo = !self.toggleInfo
+                self.toggleInfo.toggle()
             }){
                 Text(desc) // Button Text
                     .font(.custom("HelveticaNeue", size: contentSize))
@@ -294,7 +294,7 @@ struct MailView: View {
                     mailObjects("To", self.mail.to)
 
                     // Body
-                    mailObjects("", self.mail.body)
+                    mailObjects("", self.mail.body).padding(.top)
 
                     Spacer()
 
@@ -347,11 +347,11 @@ struct MailView: View {
                     .padding(.all)
                 // Spacer()
             }
-            // Spacer()
+            Spacer()
         }.background(Color.red)
             .frame(width: self.size.width, height: self.size.height)
             .cornerRadius(25)
-            .opacity(0.65)
+            .opacity(0.85)
     }
     
     private var famOverlay: some View{
@@ -365,11 +365,11 @@ struct MailView: View {
                     .padding(.all)
                 Spacer()
             }
-            // Spacer()
+            Spacer()
         }.background(Color.green)
             .frame(width: self.size.width, height: self.size.height)
             .cornerRadius(25)
-            .opacity(0.65)
+            .opacity(0.85)
     }
 }
 

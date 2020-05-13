@@ -38,9 +38,14 @@ func removeDuplicates(tokens: [String.SubSequence]) -> [String] {
 
 // Preprocesses the data to plain tokenize words
 func preprocess(data: String) -> [String] {
-    // Splits into words
+    // Filters symbols
+    // var temp = data.filterAlphanum
+    //Lowercase the words to maximise ranking
+    // temp = temp.lowercased()
+    // Splits the sentences into words.
+    // temp = temp.split(separator: " ")
     // Remove duplicates
-    return removeDuplicates(tokens: data.filterAlphanum.split(separator: " "))
+    return removeDuplicates(tokens: data.filterAlphanum.lowercased().split(separator: " "))
 }
 
 // Adds Fam email to tokens (good list)
