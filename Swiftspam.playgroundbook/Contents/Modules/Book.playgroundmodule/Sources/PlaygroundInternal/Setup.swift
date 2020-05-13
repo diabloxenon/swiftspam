@@ -14,6 +14,7 @@ public func _setup() {
 }
 
 // Starts the Swiftspam engine
-public func _start() {
+public func _start(_ trDat: [Mail], _ tsDat: [Mail]) {
+    let hosting = setHosting(trDat, tsDat)
     PlaygroundPage.current.setLiveView(hosting)
 }

@@ -11,7 +11,7 @@
 //#-code-completion(identifier, hide, AbstractDrawable, _ColorLiteralType, _setup())
 //#-hidden-code
 _setup()
-_start()
+_start(trainingData, testData)
 //#-end-hidden-code
 
 /*:#localized(key: "FirstProseBlock")

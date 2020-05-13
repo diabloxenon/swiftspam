@@ -373,4 +373,6 @@ struct MailView: View {
     }
 }
 
-public var hosting = UIHostingController(rootView: ContentView(mails: trainingData, testMails: testData))
+public func setHosting(_ trData: [Mail], _ tsData: [Mail] ) -> UIHostingController<ContentView> {
+    return UIHostingController(rootView: ContentView(mails: trData, testMails: tsData))
+}
