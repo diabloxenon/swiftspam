@@ -134,21 +134,21 @@ public var trainingData = [
     
     Mail(
         id: 14, 
-        subject: "Not Anymore", 
+        subject: "Shared Document Phishing Attacks", 
         from: "Naman Bishnoi", 
-        to: "XLD", 
-        body: "No", 
-        isSpam: true, 
-        description: "false"),
+        to: "WWDC 2020 Judges", 
+        body: "You may receive an e-mail that appears to come from file-sharing sites like Dropbox or Google Drive alerting you that a document has been shared with you. The link provided in these e-mails will take you to a fake login page that mimics the real login page and will steal your account credentials.", 
+        isSpam: false, 
+        description: "Things to remember\n\n▫️ Be especially cautious when opening attachments or clicking links if you receive an email containing a warning banner indicating that it originated from an external source.\n▫️ Inspect URLs carefully to make sure they’re legitimate and not imposter sites."),
     
     Mail(
         id: 15, 
-        subject: "Not Anymore", 
+        subject: "Whaling Phishing Attacks", 
         from: "Naman Bishnoi", 
-        to: "XLD", 
-        body: "No", 
-        isSpam: true, 
-        description: "false"),
+        to: "WWDC 2020 Judges", 
+        body: "Whaling is a popular ploy aimed at getting you to transfer money or send sensitive information to an attacker via email by impersonating a real company executive. Using a fake domain that appears similar to ours, they look like normal emails from a high-level official of the company, typically the CEO or CFO, and ask you for sensitive information (including usernames and passwords).", 
+        isSpam: false, 
+        description: "Things to remember\n\n▫️ Do not provide sensitive personal information (like usernames and passwords) over email.\n▫️ Watch for email senders that use suspicious or misleading domain names."),
     
     Mail(
         id: 16, 
@@ -157,32 +157,32 @@ public var trainingData = [
         to: "Naman Bishnoi", 
         body: "Coupon code $50 off, when you spend $350 or more. You must click through this email or book through our app to redeem this coupon. Bookings using this coupon are not eligible for Hotels.com™ Rewards. How to reedem your coupon:\n1. Click this email or open our app (this will activate your coupon)\n2. Search from thousand of hotels worldwide.\n3. Book using your unique coupon code.(Enter code on the booking form).\n\nTerms and Conditions\nThis offer is for email subscribers. It's only valid when you click through from your Hotels.com coupon email. Access your Hotels.com coupon email from your email inbox and click through to our website. Apply your discount before you book.\nUse this coupon to get $50 off the price of your booking at a participating Best Price Guarantee hotel when you stay between 1 and 28 nights and you spend a minimum of $350 for your entire stay.", 
         isSpam: true, 
-        description: "Legit companies usually call you by your name, This is a very convincing email.\n For me, the clue was in the email domain."),
+        description: "Legit companies usually call you by your name, This is a very convincing email.\nFor me, the clue was in the email's domain name. Always Inspect URLs carefully to make sure they’re legitimate and not imposter sites."),
     
     Mail(
         id: 17, 
-        subject: "Not Anymore", 
+        subject: "Spear Phishing Attacks", 
         from: "Naman Bishnoi", 
-        to: "XLD", 
-        body: "No", 
-        isSpam: true, 
-        description: "false"),
+        to: "WWDC 2020 Judges", 
+        body: "Spear phishing is a more sophisticated phishing attack that includes customized information that makes the attacker seem like a legitimate source. They may use your name and phone number and refer to your company in the e-mail to trick you into thinking they have a connection to you, making you more likely to click a link or attachment that they provide.", 
+        isSpam: false, 
+        description: "'Phishing' is the most common type of cyber attack that affects organizations like ours. Phishing attacks can take many forms, but they all share a common goal – getting you to share sensitive information such as login credentials, credit card information, or bank account details."),
     
     Mail(
         id: 18, 
-        subject: "Not Anymore", 
+        subject: "Always Think Before You Click", 
         from: "Naman Bishnoi", 
-        to: "XLD", 
-        body: "No", 
-        isSpam: true, 
-        description: "false"),
+        to: "WWDC 2020 Judges", 
+        body: "The most common way Ransomware 🏴‍☠️ enters corporate networks is through email. Often, scammers will include malicious links or attachments in emails that look harmless. To avoid this trap, please observe the following email best practices:\n▪️ Do not click on links or attachments from unrecognizable senders. Be especially wary of .zip or other compressed or executable file types.\n▪️ Do not provide sensitive personal information (like usernames and passwords) over email.\n▪️ Watch for email senders that use suspicious or misleading domain names.\n▪️ If you can’t tell if an email is legitimate or not, please refer to your company's protocol.", 
+        isSpam: false, 
+        description: "Be especially cautious when opening attachments or clicking links if you receive an email containing a warning banner indicating that it originated from an external source.\n\nIf your computer is infected with ransomware, you will typically be locked out of all programs and a “ransom screen” will appear. In the unfortunate event that you click a link or attachment that you suspect is malware or ransomware, please notify IT immediately."),
     
     Mail(
         id: 19, 
         subject: "Restore your account", 
         from: "PayTrans <VT@paytrans.com>", 
         to: "Naman Bishnoi", 
-        body: "Dear customer,\nWe regret to inform you that your account has been restricted.\nTo continue using our services please download the file attached to this e-mail and update your login information.\n\nCopyright, PaymentTransferInc\n\n\n[update2816.html]", 
+        body: "Dear customer,\nWe regret to inform you that your account has been restricted.\nTo continue using our services please download the file attached to this e-mail and update your login information.\n\nCopyright, PaymentTransferInc\n\n\n[update1337.html]", 
         isSpam: true, 
         description: "Legit companies don’t request your sensitive information via email. Notice the generic salutation at the beginning, and the unsolicited web link attachment?"),
     

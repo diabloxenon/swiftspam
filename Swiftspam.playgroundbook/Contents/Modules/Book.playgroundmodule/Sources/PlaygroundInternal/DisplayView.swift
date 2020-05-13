@@ -79,7 +79,7 @@ public struct ContentView: View {
         return Group {
             // Range Operator
             if (self.mailsMaxID - 3)...self.mailsMaxID ~= mx.id {
-                MailView(size: self.cardDim, mail: mx, mails: self.$mails, dim: self.frame, stats: self.stats)
+                MailView(size: self.cardDim, mail: mx, mails: self.$mails, dim: self.frame, stats: self.stats, result: self.testResult)
                     .offset(x: 0, y: self.getCardOffset(mails: self.mails, id: mx.id))
                 .animation(.spring())
             }
@@ -93,11 +93,11 @@ public struct ContentView: View {
             if self.testResult == .FamSpam {
                 self.title = "⚠️ False ➕"
             }
-            if self.testResult == .SpamFam {
-                self.title = "⚠️ False ➖"
-            }
             if self.testResult == .SpamSpam {
                 self.title = "\(spamEmoji) Spam"
+            }
+            if self.testResult == .SpamFam {
+                self.title = "⚠️ False ➖"
             }
             if self.testResult == .FamFam {
                 self.title = "\(famEmoji) Fam"
@@ -105,12 +105,12 @@ public struct ContentView: View {
             if self.testMails.count == 0 {
                 self.stats = .testingDone
             }
-            print(self.title)
+            // print(self.title)
         }
         return Group {
             // Range Operator
             if (self.testMailsMaxID - 3)...self.testMailsMaxID ~= mx.id {
-                MailView(size: self.cardDim, mail: mx, mails: self.$testMails, dim: self.frame, stats: self.stats)
+                MailView(size: self.cardDim, mail: mx, mails: self.$testMails, dim: self.frame, stats: self.stats, result: self.testResult)
                     .offset(x: 0, y: self.getCardOffset(mails: self.testMails, id: mx.id))
                 .animation(.spring())
             }
@@ -179,6 +179,7 @@ struct MailView: View {
     @State private var spamOrHam: SpamFam = .none
     var dim: CGSize
     var stats: Status
+    var result: Results
     
     @State private var offset: CGSize = .zero
     @State private var toggleInfo = false
@@ -192,8 +193,6 @@ struct MailView: View {
                 }.simultaneously(with: DragGesture()
                 .onChanged {
                     self.offset = $0.translation
-                    
-                if self.stats == .start {
                     if $0.translation.width / self.dim.width >= 0.35{
                         self.spamOrHam = .fam
                     } else if $0.translation.width / self.dim.width <= -0.35{
@@ -201,30 +200,16 @@ struct MailView: View {
                     } else {
                         self.spamOrHam = .none
                     }
-                } else if self.stats == .trainingDone {
-                    // TODO: Remove the self.mail.isSpam and link it with actual predictions.
-                    if self.mail.isSpam{
-                        self.spamOrHam = .spam
-                        self.offset.width = self.dim.width * -0.35
-                    } else {
-                        self.spamOrHam = .fam
-                        self.offset.width = self.dim.width * 0.35
-                    }
-                }
-
                 }
                 .onEnded { v in withAnimation {
                     if abs(v.translation.width/self.dim.width) > 0.35{
                         // Add mail data to the list
-                        if self.spamOrHam == .fam && self.stats == .start {
+                        if self.spamOrHam == .fam {
                             addFam(fam: &famBoy, mail: self.mail)
-                        } else if self.spamOrHam == .spam && self.stats == .start {
+                        } else if self.spamOrHam == .spam {
                             addSpam(spam: &spamBoy, mail: self.mail)
                         }
-                        self.mails.removeAll { $0.id == self.mail.id}
-//                            if let index = self.mails.firstIndex(of: self.mail) {
-//                                self.mails.remove(at: index)
-//                            }
+                        self.mails.removeAll { $0.id == self.mail.id }
                     } else{
                         self.offset = .zero
                         self.spamOrHam = .none
@@ -232,6 +217,27 @@ struct MailView: View {
                 }
             }
         )
+    }
+
+
+    var autoSwipe: some Gesture{
+        LongPressGesture( minimumDuration: 0.15, maximumDistance: 10)
+            .updating($isSelected) { value, state, _ in
+                    state = value
+                }.onChanged {_ in
+                    self.isDeleted = false
+                    // TODO: Remove the self.mail.isSpam and link it with actual predictions.
+                    if self.result == .FamSpam || self.result == .SpamSpam {
+                        self.spamOrHam = .spam
+                        self.offset.width = self.dim.width * -0.35
+                    } else if self.result == .SpamFam || self.result == .FamFam {
+                        self.spamOrHam = .fam
+                        self.offset.width = self.dim.width * 0.35
+                    }
+                }
+                .onEnded {_ in
+                    self.mails.removeAll { $0.id == self.mail.id }
+                }
     }
 
     private func infoButton(_ desc: String) -> some View{
@@ -264,24 +270,48 @@ struct MailView: View {
     
     var body: some View {
         ZStack{
-            cardView
-            if self.toggleInfo {
-                infoView
+            if self.stats == .start{
+                Group{
+                    cardView
+                    if self.toggleInfo {
+                        infoView
+                    }
+                    if self.spamOrHam == .fam{
+                        // IT IS A FAMILIAR MAIL
+                        famOverlay
+                    } else if self.spamOrHam == .spam{
+                        // BEGONE SPAMMER!
+                        spamOverlay
+                    }
+                }.shadow(color: Color(.sRGB, white: 0, opacity: 0.10), radius: 7, x: 5, y: 5)
+                .scaleEffect(self.isSelected ? 1.05 : 1)
+                .opacity(self.isSelected ? 0.9 : 1)
+                .offset(x: self.offset.width, y: self.offset.height)
+                .rotationEffect(.degrees(Double(self.offset.width / dim.width) * 25), anchor: .bottom)
+                .gesture(self.swipe)
+                .animation(.interactiveSpring())
+            } else {
+                Group{
+                    cardView
+                    if self.toggleInfo {
+                        infoView
+                    }
+                    if self.spamOrHam == .fam{
+                        // IT IS A FAMILIAR MAIL
+                        famOverlay
+                    } else if self.spamOrHam == .spam{
+                        // BEGONE SPAMMER!
+                        spamOverlay
+                    }
+                }.shadow(color: Color(.sRGB, white: 0, opacity: 0.10), radius: 7, x: 5, y: 5)
+                .scaleEffect(self.isSelected ? 1.05 : 1)
+                .opacity(self.isSelected ? 0.9 : 1)
+                .offset(x: self.offset.width, y: self.offset.height)
+                .rotationEffect(.degrees(Double(self.offset.width / dim.width) * 25), anchor: .bottom)
+                .gesture(self.autoSwipe)
+                .animation(.interactiveSpring())
             }
-            if self.spamOrHam == .fam{
-                // IT IS A FAMILIAR MAIL
-                famOverlay
-            } else if self.spamOrHam == .spam{
-                // BEGONE SPAMMER!
-                spamOverlay
-            }
-        }.shadow(color: Color(.sRGB, white: 0, opacity: 0.10), radius: 7, x: 5, y: 5)
-            .scaleEffect(self.isSelected ? 1.05 : 1)
-        .opacity(self.isSelected ? 0.9 : 1)
-        .offset(x: self.offset.width, y: self.offset.height)
-        .rotationEffect(.degrees(Double(self.offset.width / dim.width) * 25), anchor: .bottom)
-        .gesture(self.swipe)
-        .animation(.interactiveSpring())
+        }
     }
     
     private var cardView: some View{
