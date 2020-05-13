@@ -9,7 +9,7 @@ import PlaygroundSupport
 // Setup the canvas layout for full view
 public func _setup() {
     let viewController = UIViewController()
-    viewController.view.addSubview(Canvas.shared.backingView)
+    viewController.view.addSubview(Frame.shared.backingView)
     PlaygroundPage.current.liveView = viewController
 }
 

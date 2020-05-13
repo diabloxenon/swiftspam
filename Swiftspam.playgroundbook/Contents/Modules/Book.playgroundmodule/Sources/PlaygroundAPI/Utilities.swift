@@ -20,7 +20,7 @@ import SwiftUI
 extension String {
     
     var filterAlphanum: String {
-        let allowed = Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890")
+        let allowed = Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890")
         return self.filter {allowed.contains($0) }
     }
 }
