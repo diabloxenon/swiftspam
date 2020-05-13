@@ -1,19 +1,13 @@
 import SwiftUI
 //Constants
 // Swift Playgrounds
-let iconSize: CGFloat = 128
-let headingSize: CGFloat = 64
-let contentSize: CGFloat = 24
+var iconSize: CGFloat = 128
+var headingSize: CGFloat = 64
+var contentSize: CGFloat = 24
 
 var famBoy = Fam()
 var spamBoy = Spam()
-
 var model:Classifier = Classifier(newModel: MultinomialTf)
-
-// Playgrounds
-// let iconSize: CGFloat = 64
-// let headingSize:CGFloat = 48
-// let contentSize:CGFloat = 16
 
 // Common Constants
 let factor:CGFloat = 0.75
@@ -48,6 +42,17 @@ public struct ContentView: View {
             self.frame = geometry.size
             self.cardDim.height = geometry.size.height * factor
             self.cardDim.width = geometry.size.height * factor * 0.6 //Aspect ratio
+            // Playgrounds
+            if self.cardDim.width <= 400{
+                iconSize = 64
+                headingSize = 48
+                contentSize = 16
+            } else {
+                // Swift Playgrounds
+                iconSize = 128
+                headingSize = 64
+                contentSize = 24
+            }
         }
         return EmptyView()
     }
@@ -69,7 +74,6 @@ public struct ContentView: View {
 //        self.title = "\(self.mails.count) more to go"
 //        print(self.title)
         if self.mails.count == 1 {
-//            print("BP 1 familiar mails: \(famBoy) spam mails: \(spamBoy)")
             model = train(fam: famBoy, spam: spamBoy)
             self.title = "Training Done"
             print(self.title)
@@ -185,6 +189,7 @@ struct MailView: View {
     @State private var toggleInfo = false
     
     @GestureState var isSelected = false
+    @State var isDeleted = false
     
     var swipe: some Gesture{
         LongPressGesture()
@@ -221,11 +226,11 @@ struct MailView: View {
 
 
     var autoSwipe: some Gesture{
-        LongPressGesture( minimumDuration: 0.15, maximumDistance: 10)
+        LongPressGesture( minimumDuration: 0.75, maximumDistance: 10)
             .updating($isSelected) { value, state, _ in
+                    self.isDeleted = false
                     state = value
                 }.onChanged {_ in
-                    self.isDeleted = false
                     // TODO: Remove the self.mail.isSpam and link it with actual predictions.
                     if self.result == .FamSpam || self.result == .SpamSpam {
                         self.spamOrHam = .spam
@@ -234,10 +239,20 @@ struct MailView: View {
                         self.spamOrHam = .fam
                         self.offset.width = self.dim.width * 0.35
                     }
+                    self.isDeleted = true
                 }
                 .onEnded {_ in
                     self.mails.removeAll { $0.id == self.mail.id }
                 }
+    }
+
+    private func checkDelete() -> some View{
+        DispatchQueue.main.async{
+            if self.isDeleted && !self.isSelected {
+                self.mails.removeAll { $0.id == self.mail.id }
+            }
+        }
+        return EmptyView()
     }
 
     private func infoButton(_ desc: String) -> some View{
@@ -303,6 +318,7 @@ struct MailView: View {
                         // BEGONE SPAMMER!
                         spamOverlay
                     }
+                    self.checkDelete()
                 }.shadow(color: Color(.sRGB, white: 0, opacity: 0.10), radius: 7, x: 5, y: 5)
                 .scaleEffect(self.isSelected ? 1.05 : 1)
                 .opacity(self.isSelected ? 0.9 : 1)
