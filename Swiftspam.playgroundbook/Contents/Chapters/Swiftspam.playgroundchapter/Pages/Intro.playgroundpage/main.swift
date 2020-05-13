@@ -32,5 +32,5 @@ _start()
  
  Although, I don't expect a completely spam free mailbox due to algorithmic efficiencies but it gets rid of most unnecessary stuff. This open-source project gives you full right to do whatever you want with your data.
 
- You can check the source code of this project repository at https://github.com/diabloxenon/swiftspam
+ You can check the source code of this project repository at [Github](https://github.com/diabloxenon/swiftspam)
  */
