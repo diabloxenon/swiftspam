@@ -12,6 +12,7 @@ var model:Classifier = Classifier(newModel: MultinomialTf)
 // Common Constants
 let factor:CGFloat = 0.75
 let flickRatio:CGFloat = 0.25
+let appreciation = ["👏🏻 Keep going!", "😄 Great Job", "👌 Good Work"]
 
 let textColor = Color(.sRGB, white: 0, opacity: 0.8)
 
@@ -23,7 +24,7 @@ enum SpamFam: Int {
 }
 
 enum Status: Int {
-    case start, trainingDone, testingDone
+    case start, trainingDone, intervalDone, testingDone
 }
 
 public struct ContentView: View {
@@ -34,6 +35,7 @@ public struct ContentView: View {
     @State private var title: String = "📨 Swiftspam"
     @State private var stats: Status = .start
     @State private var testResult: Results = .None
+    @State var startTesting = false
     
     @State private var frame: CGSize = .zero // Contains Geometrical dims of current view.
     @State private var cardDim: CGSize = .zero
@@ -73,13 +75,12 @@ public struct ContentView: View {
     
     func trainingEmails(_ mx: Mail) -> some View{
         DispatchQueue.main.async{
-//        self.title = "\(self.mails.count) more to go"
-//        print(self.title)
-        if self.mails.count == 1 {
-            model = train(fam: famBoy, spam: spamBoy)
-            self.title = "Training Done"
-            print(self.title)
-            self.stats = .trainingDone
+        if self.mails.count <= 18 {
+            self.title = appreciation.randomElement()!
+        }
+
+        if self.mails.count <= 10{
+            self.title = "\(self.mails.count) mails to go"
         }
         }
         return Group {
@@ -91,10 +92,20 @@ public struct ContentView: View {
             }
         }
     }
+
+    func interval() -> some View{
+        DispatchQueue.main.async{
+            if self.mails.count == 0 {
+                model = train(fam: famBoy, spam: spamBoy)
+                self.title = "💪🏻 Training Done"
+                self.stats = .trainingDone
+            }
+        }
+        return EmptyView()
+    }
     
     func testEmails(_ mx: Mail) -> some View{
         DispatchQueue.main.async{
-//            self.title = "🧪 Testing"
             self.testResult = test(mail: mx, classifier: model)
             if self.testResult == .FamSpam {
                 self.title = "⚠️ False ➕"
@@ -115,7 +126,7 @@ public struct ContentView: View {
             if (self.testMailsMaxID - 3)...self.testMailsMaxID ~= mx.id {
                 MailView(size: self.cardDim, mail: mx, mails: self.$testMails, dim: self.frame, stats: self.stats, result: self.testResult)
                     .offset(x: 0, y: self.getCardOffset(mails: self.testMails, id: mx.id))
-                .animation(.spring())
+                    .animation(.spring())
             }
         }
     }
@@ -158,12 +169,17 @@ public struct ContentView: View {
                 ZStack{
                     // Training Emails
                     if self.stats == .start{
+                        self.interval()
                         ForEach(self.mails, id: \.self) { mail in
                             self.trainingEmails(mail)
                         }
                     }
                     
                     if self.stats == .trainingDone {
+                        self.intervalCard
+                    }
+                    
+                    if self.stats == .intervalDone {
                         self.congrats()
                         ForEach(self.testMails, id: \.self) { mail in
                             self.testEmails(mail)
@@ -179,6 +195,29 @@ public struct ContentView: View {
             }
         }
     }
+    }
+    
+    private var intervalCard: some View {
+        Group{
+            VStack{
+                Spacer()
+                HStack{
+                    Spacer()
+                    Text("🥇")
+                        .font(.custom("HelveticaNeue-Thin", size: iconSize))
+                        .padding(.all)
+                    Spacer()
+                }
+                Spacer()
+            }.background(LinearGradient(gradient: Gradient(colors: [Color.swiftspamIntCardBG1, Color.swiftspamIntCardBG2]), startPoint: UnitPoint(x: 1, y: 1), endPoint: UnitPoint(x: 0, y: 0)))
+            .frame(width: self.cardDim.width, height: self.cardDim.height)
+            .cornerRadius(25)
+            .gesture( TapGesture(count: 1)
+                    .onEnded { _ in
+                    self.startTesting = true
+                    self.stats = .intervalDone
+                })
+        }.shadow(color: Color(.sRGB, white: 0, opacity: 0.10), radius: 7, x: 5, y: 5)
     }
 }
 

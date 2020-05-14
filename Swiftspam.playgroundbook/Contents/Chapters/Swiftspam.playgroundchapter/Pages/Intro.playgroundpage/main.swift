@@ -17,7 +17,7 @@ _start(trainingData, testData)
 /*:#localized(key: "FirstProseBlock")
  # Suspicious or Familiar 🤔 
 
- Every crisis brings an opportunity. For developers, it is our skills and effort to create one, for hackers it is their malicious intent. With COVID-19, the world is seeing a revolution in their workplaces where at center of it are our mailbox.
+ Every crisis brings an opportunity. For developers, it is our skills and effort to create one, for hackers it is their malicious intent. With COVID-19, the world is seeing a revolution in their workplaces where at center of it are our mailboxes.
  
  This playground gives you a unique freedom to explore how you can identify one of the most threatening cyber attack that no antivirus can save you from. Yes I am talking about SPAM!
  
@@ -27,10 +27,12 @@ _start(trainingData, testData)
  
  Keeping things simple, I have designed this playground to effortlessly segregate emails. To classify the emails, simply:
  - 
- - **Swipe left** for Spam 👻
- - **Swipe right** for Fam 👍🏻
- 
- Although, I don't expect a completely spam free mailbox due to algorithmic efficiencies but it gets rid of most unnecessary stuff. This open-source project gives you full right to do whatever you want with your data.
+ - **Swipe left** for `Spam 👻`
+ - **Swipe right** for `Fam 👍🏻`
+
+ Although, I don't expect a completely spam free mailbox due to algorithmic inefficiencies but it gets rid of most unnecessary stuff. This open-source project gives you full right to do whatever you want with your data.
+
+ If you see testing mails with `⚠️ False ➕` or `⚠️ False ➖` symbols, that means somehow you have classified wrong mails in training phase. Please, train the emails carefully.
 
  You can check the source code of this project repository at [Github](https://github.com/diabloxenon/swiftspam)
  */

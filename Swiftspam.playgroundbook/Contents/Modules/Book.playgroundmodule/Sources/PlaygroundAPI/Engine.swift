@@ -45,7 +45,9 @@ func preprocess(data: String) -> [String] {
     // Splits the sentences into words.
     // temp = temp.split(separator: " ")
     // Remove duplicates
-    return removeDuplicates(tokens: data.filterAlphanum.lowercased().split(separator: " "))
+    // return removeDuplicates(tokens: data.filterAlphanum.lowercased().split(separator: " "))
+    // Using Term Frequency - IDF to classify emaisl with keyword freq.
+    return data.filterAlphanum.lowercased().replacingOccurrences(of: "\n", with: " ").split(separator: " ").map { String($0) }
 }
 
 // Adds Fam email to tokens (good list)
