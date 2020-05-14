@@ -1,7 +1,7 @@
 import PlaygroundSupport
 
-
-PlaygroundPage.current.setLiveView(hosting)
+import SwiftUI
+//PlaygroundPage.current.setLiveView(hosting)
 
 //var fam = Fam()
 //var spam = Spam()
@@ -19,3 +19,14 @@ PlaygroundPage.current.setLiveView(hosting)
 //var (allScores, cls, cert) = model.classify(tokens: ["iam", "attachment", "now"])
 //
 //print(allScores, cls)
+
+//public func setHosting(_ trData: [Mail], _ tsData: [Mail] ) -> UIHostingController<ContentView>{
+//    return UIHostingController(rootView: ContentView(mails: trData, testMails: tsData))
+//}
+
+
+var h = setHosting(trainingData, testData)
+
+PlaygroundPage.current.setLiveView(h)
+//print(type(of: hosting))
+//type(of: hosting)
