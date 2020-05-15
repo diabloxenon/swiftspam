@@ -16,6 +16,7 @@ Keeping things simple, I have designed this playground to effortlessly segregate
 
 - **Swipe left** for `Spam 👻`
 - **Swipe right** for `Fam 👍🏻`
+- **After 💪 Training**, Hold down the `📧mail card` to automatically classify it.
 
 You can always use hint to check if its spam or not by clicking on `Learn More ℹ️` at bottom of card.
 
@@ -30,6 +31,10 @@ You can always use hint to check if its spam or not by clicking on `Learn More �
 If you see testing mails with `⚠️ False ➕` or `⚠️ False ➖` symbols, that means somehow you have classified wrong mails in training phase. Please, train the emails carefully.
 
 Although, I don't expect a completely spam free mailbox due to algorithmic inefficiencies but it gets rid of most unnecessary stuff. This open-source project gives you full right to do whatever you want with your data.
+
+## Similar Project
+
+This project is based mostly on my another project [Spamaway](https://github.com/diabloxenon/spamaway). This one is written in Go.
 
 ## Resource Credits
 

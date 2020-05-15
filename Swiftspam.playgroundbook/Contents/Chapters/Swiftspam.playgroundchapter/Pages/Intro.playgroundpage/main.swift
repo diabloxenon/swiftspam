@@ -22,26 +22,19 @@ _start(trainingData, testData)
  
  Hi, I am Naman Bishnoi and in this year's WWDC I will discuss about one of the major cyber threats that take down biggest of the big organizations, SPAM. SPAM stands for **SusPicious Annoying Mails** (or that's what I think of atleast) and good ones are FAM (**FAmiliar Mails**) which we need to look for. 
  
- We will explore how you can identify a SPAM email from FAM. First few emails will be selected manually by you just for the sake of training our machine learning model (in this case it's Naive Bayes). After that, it will use that trained model to automatically classify the remaining emails.
+ We will explore how you can differentiate a SPAM email from FAM. First few emails will be selected manually by you just for the sake of training our ML model (in this case it's Naive Bayes). After that, it will use that trained model to automatically classify the remaining emails. 
  
- ## How to Use?
+ Sounds good? Let's get started
+ 
+ ## How to Use
  
  Keeping things simple, I have designed this playground to effortlessly segregate your emails. To classify the emails, just simply:
  - **Swipe left** for `Spam 👻`
  - **Swipe right** for `Fam 👍🏻`
+ - **After 💪 Training**, Hold down the `📧mail card` to automatically classify it.
 
  * Callout(Tip):
  You can always use hint to check if its spam or not by clicking on `Learn More ℹ️` at bottom of card.
-
- ## Features
- * TF-IDF weights with Naive Bayes modelling used which is considered to be as fast as SVM.
- * This model also helps alleviate problems stemming from the curse of dimensionality.
- * The legitimate e-mails a user receives will tend to be different. For example, in a corporate environment, the company name and the names of clients or customers will be mentioned often. The filter will assign a lower spam probability to emails containing those names.
-
- 
-
- - note:
- If you see testing mails with `⚠️ False ➕` or `⚠️ False ➖` symbols, that means somehow you have classified wrong mails in training phase. Please, train the emails carefully.
  
  
 
@@ -49,6 +42,11 @@ _start(trainingData, testData)
 
  You can check the source code of this project repository at [Github](https://github.com/diabloxenon/swiftspam)
 
+ 
+
+ - note:
+ If you see testing mails with `⚠️ False ➕` or `⚠️ False ➖` symbols, that means somehow you have classified wrong mails in training phase. Please, train the emails carefully.
+ 
  
 
  [Credits ➤](@next)

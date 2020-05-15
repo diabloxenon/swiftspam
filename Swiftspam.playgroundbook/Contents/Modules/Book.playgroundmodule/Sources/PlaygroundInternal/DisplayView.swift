@@ -369,7 +369,6 @@ struct MailView: View {
                         // BEGONE SPAMMER!
                         spamOverlay
                     }
-                    self.checkDelete()
                 }.shadow(color: Color(.sRGB, white: 0, opacity: 0.10), radius: 7, x: 5, y: 5)
                 .scaleEffect(self.isSelected ? 1.05 : 1)
                 .opacity(self.isSelected ? 0.9 : 1)
@@ -377,6 +376,7 @@ struct MailView: View {
                 .rotationEffect(.degrees(Double(self.offset.width / dim.width) * 25), anchor: .bottom)
                 .gesture(self.autoSwipe)
                 .animation(.interactiveSpring())
+                self.checkDelete()
             }
         }
     }
