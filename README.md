@@ -39,4 +39,4 @@ Although, I don't expect a completely spam free mailbox due to algorithmic ineff
 - [Spamassasin](http://spamassassin.apache.org/old/publiccorpus/) for their open source corpora dataset.
 - [Securitymetrics](https://www.securitymetrics.com/blog/7-ways-recognize-phishing-email) for their awesome article on the same.
 - [Scamnet](https://www.scamnet.wa.gov.au/scamnet/Scam_prevention-Email_scam_examples.htm#) for spam examples
-- Thumbnail is freely available at [Freepik]("https://www.freepik.com/free-photos-vectors/business") and redesigned by me.
+- Thumbnail is freely available at [Freepik](https://www.freepik.com/free-photos-vectors/business) and redesigned by me.
