@@ -27,7 +27,7 @@ public var trainingData = [
     Mail(
         id: 2, 
         subject: "Goodbye Global Warming", 
-        from: "Jim Whitehead <ejw@cse.ucsc.edu>", 
+        from: "👨‍🔬 Jim Whitehead <ejw@cse.ucsc.edu>", 
         to: "🦸🏻‍♂️ Naman Bishnoi", 
         body: "It is generally accepted that increases in CO2 in a closed environment subject to solar heating retain more of that solar energy. This is the current best explanation for the high temperature of Venus. If the CO2 concentration goes up globally (which it has), then theory states the earth should be retaining greater solar energy. This process may be slow, and may be difficult to monitor due to the variability of temperatures worldwide. I encourage you to refute any part of this causal chain linking CO2 to eventual increases in global energy content, part of which will be evident as heat.", 
         isSpam: false, 
@@ -45,8 +45,8 @@ public var trainingData = [
     Mail(
         id: 4, 
         subject: "YET ANOTHER VIAGRA SPAM!!!", 
-        from: "Killroy", 
-        to: "Jimmy Beans", 
+        from: "👺 Killroy", 
+        to: "🤓 Jimmy Beans", 
         body: "ironmandan explod your sex life all natur altern men of iron ha been featur on over number tv new and top radio station across america and we know why it realli work bui two bottl and get on free formul for men no doctor visit requir no prescript need not a drug click here to visit our web site iron man benefit number number formula for men dramat enhanc organ no neg side effect all natur ingredi boost multipl orgasm doe not increas blood pressur increas circul in men so erect becom firmer help men with a sexual respons dysfunct or lack of interest in sex clear impot problem boost multipl climax reliev emot up down and headach help reliev prostat problem lower cholesterol veri afford price visit our web site click here learn about our special offer", 
         isSpam: true, 
         description: "This is a filtered form of data I have performed in the same project written in Go. See at https://github.com/diabloxenon/spamaway"),
@@ -54,8 +54,8 @@ public var trainingData = [
     Mail(
         id: 5, 
         subject: "Mail Agent", 
-        from: "Hal DeVore <haldevore@acm.org>", 
-        to: "Redhat <exmh-users@example.com>", 
+        from: "👨‍🔬 Hal DeVore", 
+        to: "Redhat", 
         body: "Your sysadmins are wrong.\nWhatever program that is used to store the mail into the braindead 'mailbox' file (/var/spool/mail/whatever) is supposed to escape a line that begins with From.  That program is called the local Mail Delivery Agent (MDA)\n\nIt would be better if you never, ever, stored your mail in a 'mailbox' file.\n\nIf your sysadmins are capable of it, get them to set up the receiving Mail Transfer Agent (MTA) to allow the use of procmail as the local MDA.  Then use procmail to invoke rcvstore and deliver your mail directly into your MH mail folders.\n\nMost Linux systems come configured this way, if a user has a $HOME/.procmail file then mail is delivered using procmail.", 
         isSpam: false, 
         description: "Mail data is freely available at Apache Spamassasin Open Mail Corpora"),
@@ -63,7 +63,7 @@ public var trainingData = [
     Mail(
         id: 6, 
         subject: "Not Anymore", 
-        from: "David B. Thompson <thompson@shelob.ce.ttu.edu>", 
+        from: "👨‍🔬 David B. Thompson", 
         to: "Linux Community", 
         body: "These are some good comments and I'd like to share an opinion here.  (Is that permitted? :)\n\nI started using linux about 8 or 9 years ago in rebellion against what the university was doing with Winder$.  I just couldn't get good support and was using a lot of unix-based tools (ported to Winder$) anyway. So, I jumped ship and became my own sysadm.\n\nWhat I got was the easy ability to use a shell (now ssh) to connect to my office box from just about anywhere and use either exmh or nmh (from the command line).  I can do email for the office fairly easily.\n\nI haven't seen any other tools that let me do that yet.  But, I have to admit, that some of the web-based mail software is getting pretty close.  Quoting and such is still primitive, but they're moving forward.", 
         isSpam: false, 
@@ -90,7 +90,7 @@ public var trainingData = [
     Mail(
         id: 9, 
         subject: "Ready. Set. Code.", 
-        from: "Apple Developer", 
+        from: "🍎 Apple Developer", 
         to: "🦸🏻‍♂️ Naman Bishnoi", 
         body: "👨🏻‍💻 On June 22, WWDC20 takes off. Get ready for the first global, all-online WWDC by downloading the Apple Developer app to stay notified on all the latest news, with updates for events and sessions. And there’s a lot more to come — starting with the first-ever Swift Student Challenge. <Learn More>", 
         isSpam: false, 
@@ -118,7 +118,7 @@ public var trainingData = [
         id: 12, 
         subject: "I ❤️ Tifa", 
         from: "🦸🏻‍♂️ Naman Bishnoi", 
-        to: "Square Enix", 
+        to: "🏢 Square Enix", 
         body: "AVALANCHE destroys a Shinra Mako reactor in Midgar; an attack on another reactor goes wrong, and Cloud falls into the city slums. There, he meets Aerith and protects her from Shinra.\nMeanwhile, Shinra finds AVALANCHE and collapses part of the upper city, killing most of AVALANCHE along with the slum population below.\nAerith is also captured; as a Cetra, she can potentially reveal the 'Promised Land', which Shinra believes is overflowing with exploitable Lifestream energy.\nCloud, Barret, and Tifa rescue Aerith; during their escape from Midgar, they discover that President Shinra was murdered by Sephiroth, who was presumed dead five years earlier.\nThe party pursues Sephiroth across the Planet, with now-President Rufus on their trail.", 
         isSpam: false, 
         description: "Mail data is freely available at Apache Spamassasin Open Mail Corpora"),
@@ -180,7 +180,7 @@ public var trainingData = [
     Mail(
         id: 19, 
         subject: "Restore your account", 
-        from: "PayTrans <VT@paytrans.com>", 
+        from: "💸 PayTrans <VT@paytrans.com>", 
         to: "🦸🏻‍♂️ Naman Bishnoi", 
         body: "Dear customer,\nWe regret to inform you that your account has been restricted.\nTo continue using our services please download the file attached to this e-mail and update your login information.\n\nCopyright, PaymentTransferInc\n\n\n[update1337.html]", 
         isSpam: true, 

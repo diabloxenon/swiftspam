@@ -19,16 +19,16 @@ _rollCredits()
  # Credits 😄
 
  Special thanks to Apple for creating an awesome ecosystem and platform to express our skills 
- and their documentation which helps us a lot.
+ and their documentation which helps us a lot. I mean it, SwiftUI is such a blessing 😍.
 
   
 
  Huge shoutout 👋🏻 to following open resources which helped me in creating this:
- - https://en.wikipedia.org/wiki/Naive_Bayes_spam_filtering for reference guide
- - https://sebastianraschka.com/Articles/2014_naive_bayes_1.html for his awesome work on the topic
- - http://spamassassin.apache.org/old/publiccorpus/ their open source corpora dataset.
- - https://www.securitymetrics.com/blog/7-ways-recognize-phishing-email for their awesome article on the same.
- - https://www.scamnet.wa.gov.au/scamnet/Scam_prevention-Email_scam_examples.htm# for spam examples
+ - [Wikipedia](https://en.wikipedia.org/wiki/Naive_Bayes_spam_filtering) for reference guide
+ - [Sebastian Raschka](https://sebastianraschka.com/Articles/2014_naive_bayes_1.html) for his awesome work on the topic
+ - [Spamassasin](http://spamassassin.apache.org/old/publiccorpus/) for their open source corpora dataset.
+ - [Securitymetrics](https://www.securitymetrics.com/blog/7-ways-recognize-phishing-email) for their awesome article on the same.
+ - [Scamnet](https://www.scamnet.wa.gov.au/scamnet/Scam_prevention-Email_scam_examples.htm#) for spam examples
 
   
 
