@@ -175,10 +175,12 @@ public struct ContentView: View {
                         }
                     }
                     
+                    // Training is done, click card to continue
                     if self.stats == .trainingDone {
                         self.intervalCard
                     }
                     
+                    // Testing and classification starts now. NOTE, this autoswipes the card for you.
                     if self.stats == .intervalDone {
                         self.congrats()
                         ForEach(self.testMails, id: \.self) { mail in
@@ -186,6 +188,7 @@ public struct ContentView: View {
                         }
                     }
                     
+                    // Congratulations, here is your trophy.
                     if self.stats == .testingDone {
                         self.congrats()
                     }
@@ -278,7 +281,6 @@ struct MailView: View {
                     self.isDeleted = false
                     state = value
                 }.onChanged {_ in
-                    // TODO: Remove the self.mail.isSpam and link it with actual predictions.
                     if self.result == .FamSpam || self.result == .SpamSpam {
                         self.spamOrHam = .spam
                         self.offset.width = self.dim.width * -flickRatio
@@ -336,7 +338,7 @@ struct MailView: View {
                 Group{
                     cardView
                     if self.toggleInfo {
-                        // See Description here.
+                        // See Description here about current mail.
                         infoView
                     }
                     if self.spamOrHam == .fam{

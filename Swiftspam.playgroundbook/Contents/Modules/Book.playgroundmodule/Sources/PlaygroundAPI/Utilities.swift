@@ -1,3 +1,5 @@
+//  🧰 Utilities
+//  Copyright © 2020 Naman Bishnoi. Licensed under MIT.
 import Foundation
 import SwiftUI
 

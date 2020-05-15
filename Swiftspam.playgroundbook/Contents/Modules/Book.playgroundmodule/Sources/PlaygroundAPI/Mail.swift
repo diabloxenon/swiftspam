@@ -1,6 +1,8 @@
+// 📧 Mail
+//  Copyright © 2020 Naman Bishnoi. Licensed under MIT.
 import Foundation
 
-// The Anatomical structure of Email
+// The Anatomical structure of Email 📧
 public struct Mail: MailDelegate, Hashable {
     public var id: Int = 0
     public var subject: String = ""
