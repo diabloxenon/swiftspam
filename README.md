@@ -1,6 +1,6 @@
 # Swiftspam
 
-The open-source spam classification project purely written in Swift
+The open-source spam classification project purely written in Swift, Winner of the Apple WWDC 2020 Swift student challenge and now integrated into iOS 14, iPadOS 14 and macOS 11.0 Big Sur.
 
 Every crisis brings an opportunity. For developers, it is our skills and effort to create one, for hackers it is their malicious intent. With COVID-19, the world is seeing a revolution in their workplaces where at center of it are our mailboxes.
 
